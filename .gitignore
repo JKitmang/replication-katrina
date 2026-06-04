@@ -24,3 +24,6 @@ data/
 *.xlsx
 *.sas7bdat
 *.Rdata
+
+# original attachment (duplicate of the clean-named published PDF)
+imberman-et-al-2012-*.pdf

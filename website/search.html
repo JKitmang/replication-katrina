@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Search code · Katrina's Children replication</title>
+<style>
+  :root{--ink:#1a1a1a;--muted:#5b6470;--line:#e2e5ea;--bg:#fff;--panel:#f6f7f9;--accent:#7a1f2b;--accent2:#0b4f6c;--code:#f0f2f4;--hit:#fff3b0;--maxw:1180px}
+  *{box-sizing:border-box}
+  body{margin:0;color:var(--ink);background:var(--bg);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent2);text-decoration:none}a:hover{text-decoration:underline}
+  code{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:.88em;background:var(--code);padding:.1em .35em;border-radius:3px}
+  header.site{border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;background:var(--bg)}
+  header.site .inner{max-width:var(--maxw);margin:0 auto;padding:11px 24px;display:flex;align-items:baseline;gap:14px}
+  header.site .brand{font-weight:700}header.site .brand span{color:var(--accent)}
+  header.site .tag{color:var(--muted);font-size:13px}
+  header.site nav{margin-left:auto;font-size:14px;display:flex;gap:18px;align-self:center}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:22px 24px 80px}
+  h1{font-size:22px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 16px;max-width:820px}
+  .box{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:0 0 8px}
+  .box input[type=search]{flex:1;min-width:260px;padding:11px 13px;border:1px solid var(--line);border-radius:8px;font-size:15px}
+  .box label{font-size:13px;color:var(--muted);display:flex;gap:5px;align-items:center;white-space:nowrap}
+  .status{font-size:13px;color:var(--muted);margin:0 0 18px}
+  .ex{font-size:13px;color:var(--muted);margin:0 0 18px}
+  .ex a{margin-right:8px;display:inline-block;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:2px 10px;color:#333}
+  .ex a:hover{text-decoration:none;border-color:var(--accent2)}
+  .file{border:1px solid var(--line);border-radius:9px;margin:0 0 12px;overflow:hidden}
+  .file .fh{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:9px 14px;background:var(--panel);border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .file .fh .nm{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:13px;font-weight:600;word-break:break-all}
+  .file .fh .meta{font-size:12px;color:var(--muted);display:flex;gap:12px;align-items:center}
+  .lines{margin:0;font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.5}
+  .lines .ln{display:flex;border-bottom:1px solid #f1f3f5}
+  .lines .ln:last-child{border-bottom:0}
+  .lines .n{flex:0 0 auto;width:64px;text-align:right;padding:2px 12px;color:#b3bcc6;background:#fafbfc;border-right:1px solid var(--line);user-select:none}
+  .lines .t{padding:2px 14px;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere}
+  .more{font-size:12px;color:var(--muted);padding:6px 14px;background:#fcfcfd}
+  mark{background:var(--hit);color:inherit;border-radius:2px;padding:0 1px}
+  .empty{color:var(--muted);padding:30px 4px}
+  @media(max-width:600px){.lines .n{width:46px;padding:2px 7px}}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="inner">
+    <span class="brand">Replication&nbsp;<span>Materials</span></span>
+    <span class="tag">Katrina's Children · search code</span>
+    <nav>
+      <a href="index.html">Overview</a>
+      <a href="files.html">Browse files</a>
+      <a href="search.html">Search code</a>
+      <a href="files.html#imberman-kugler-sacerdote-2012-aer.pdf">Paper</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <h1>Search the code</h1>
+  <p class="sub">Full-text search across the content of every Stata <code>.do</code> file (plus <code>master.do</code>). Type one or more keywords — a line must contain <em>all</em> of them — and every file that matches is listed with its matching lines and line numbers. Click a result to open the full file in the <a href="files.html">browser</a>.</p>
+
+  <div class="box">
+    <input id="q" type="search" placeholder="e.g.  areg katrina_frac_grade   ·   katrina_frac_9_13   ·   quantiles   ·   outreg2" autocomplete="off" autofocus>
+    <label><input type="checkbox" id="cs"> case-sensitive</label>
+    <label><input type="checkbox" id="re"> regex</label>
+  </div>
+  <div class="ex">Try:
+    <a href="#" data-q="katrina_frac_9_13">instrument (Sept-13 share)</a>
+    <a href="#" data-q="quantiles">quartile construction</a>
+    <a href="#" data-q="absorb(campus)">school fixed effects</a>
+    <a href="#" data-q="suest">model-structure tests</a>
+    <a href="#" data-q="taks_sd_min_math">standardized TAKS math</a>
+    <a href="#" data-q="outreg2">table export</a>
+  </div>
+  <div class="status" id="status">Loading the code index…</div>
+  <div id="results"></div>
+</div>
+
+<script>
+/* all Stata source files to index */
+var NAMES=["attendence","demographics_clean","taks_append","discipline","merge_c",
+ "alt_scale","alt_standardize","alt_standardize_2","school_level_means",
+ "quartile_data","quintile_data","placebo_quartile_data",
+ "summary_stats_la","sumstats_houston","sumstats_b",
+ "analysis_revision_linear","katrina_nonkatrina","katrina_by_quartiles_va_grade_statestd",
+ "katrina_iv_gender_ethnicity_noshelter_grade","katrina_placebotest_grade",
+ "katrina_by_quartiles_lim_test_fullint_math","katrina_by_quartiles_lim_test_fullint_read",
+ "katrina_by_quartiles_pre_katrina_ols","quartile_analysis_revision_d",
+ "epple_romano_f_math_grade_fullintb","epple_romano_f_ela_grade_fullintb",
+ "quartile_analysis_revision_full_b_tests_nobon","school_level_placebo_b","school-trend",
+ "katrina_by_quartiles_va","katrina_by_quartiles_va_grade","katrina_iv_gender_ethnicity_noshelter",
+ "katrina_iv_c","katrina_iv_c_grade","katrina_by_quartiles_va_fe","katrina_by_quartiles_va_class",
+ "katrina_by_quartiles_va_campusgrade","katrina_by_quartiles_va_campusyear","katrina_by_quartiles_va_grade_altstd",
+ "katrina_by_quartiles_va_outlier","katrina_by_quartiles_va_outlier_8","katrina_by_quartiles_va_intpanel",
+ "katrina_by_quartiles_va_scale","katrina_by_quartiles_va_totenroll","katrina_by_quartiles_va_newentrant",
+ "katrina_by_quartiles_va_nozero","katrina_by_quartiles_0405inst","katrina_placebotest_c","katrina_by_quartiles_va_quintiles",
+ "katrina_by_quartiles_attrition","katrina_by_quartiles_avgweeklyenroll_b","katrina_by_quartiles_halfyear_enroll",
+ "katrina_by_quartiles_testtaking","check_non_test_takers2","katrina_by_quartiles_leave","katrina_resources",
+ "analyze_school_level2_quartiles_b","quartile_analysis_revision_full_trends_b","quartile_analysis_revision_full_scale",
+ "quartile_analysis_revision_full_FE_b","quartile_analysis_revision_alt_standard2","quartile_analysis_revision_quintiles",
+ "quartile_analysis_revision_full_b_tests","quartile_analysis_revision_trends","quartile_analysis_revision_0405inst",
+ "epple_romano_f_math_grade_fullintb_nolag","epple_romano_f_ela_grade_fullintb_nolag",
+ "epple_romano_f_math_grade_fullint_nolagint","epple_romano_f_ela_grade_fullint_nolagint",
+ "katrina_by_quartiles_lim_test_fullint","katrina_by_quartiles_lim_test_fullint_nolag","katrina_by_quartiles_lim_test_nolag",
+ "katrina_by_quartiles_lim_test_fullint_math_nolag","katrina_by_quartiles_lim_test_fullint_math_nolagint",
+ "katrina_by_quartiles_lim_test_fullint_read_nolag","katrina_by_quartiles_lim_test_fullint_read_nolagint",
+ "katrina_by_quartiles_lim_test_fullint_math_temp","extra_stuff","extra_stuff_houston"];
+
+var FILES=NAMES.map(function(n){return {f:n+".do",p:"../programs/"+n+".do"}});
+FILES.push({f:"master.do",p:"../master.do"});
+
+var INDEX=[];          // {f, p, lines:[string]}
+var totalLines=0;
+var statusEl=document.getElementById('status');
+var resEl=document.getElementById('results');
+var qEl=document.getElementById('q');
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function reEsc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}
+
+/* build the index */
+var loaded=0;
+Promise.all(FILES.map(function(file){
+  return fetch(file.p).then(function(r){return r.ok?r.text():""}).then(function(txt){
+    INDEX.push({f:file.f,p:file.p,lines:txt.split('\n')});
+    totalLines+=txt.split('\n').length; loaded++;
+    statusEl.textContent='Loading the code index… '+loaded+'/'+FILES.length+' files';
+  }).catch(function(){loaded++;});
+})).then(function(){
+  INDEX.sort(function(a,b){return a.f<b.f?-1:1});
+  statusEl.textContent='Indexed '+INDEX.length+' files · '+totalLines.toLocaleString()+' lines. Type a keyword above.';
+  if(qEl.value.trim())run();
+  var h=decodeURIComponent(location.hash.slice(1)); if(h){qEl.value=h;run();}
+});
+
+/* build a matcher from the query */
+function buildMatcher(q){
+  var cs=document.getElementById('cs').checked;
+  var useRe=document.getElementById('re').checked;
+  if(useRe){
+    var rx; try{rx=new RegExp(q,cs?'g':'gi');}catch(e){return null;}
+    return {test:function(line){rx.lastIndex=0;return rx.test(line)}, rx:rx, terms:null, cs:cs, re:true};
+  }
+  var terms=q.split(/\s+/).filter(Boolean);
+  var cmp=cs?terms:terms.map(function(t){return t.toLowerCase()});
+  return {
+    test:function(line){var L=cs?line:line.toLowerCase();for(var i=0;i<cmp.length;i++){if(L.indexOf(cmp[i])<0)return false;}return true;},
+    terms:terms, cs:cs, re:false
+  };
+}
+function highlight(line,m){
+  if(m.re){
+    var rx=new RegExp(m.rx.source,m.cs?'g':'gi');
+    return esc(line).replace(new RegExp(reEsc(rx.source),m.cs?'g':'gi'),function(x){return '<mark>'+x+'</mark>'}); // fallback: highlight literal source
+  }
+  var out=esc(line);
+  m.terms.forEach(function(t){
+    out=out.replace(new RegExp(reEsc(esc(t)),m.cs?'g':'gi'),function(x){return '<mark>'+x+'</mark>'});
+  });
+  return out;
+}
+
+var PERFILE=12;   // max matching lines shown per file
+function run(){
+  var q=qEl.value.trim();
+  resEl.innerHTML='';
+  if(!q){return;}
+  var m=buildMatcher(q);
+  if(!m){resEl.innerHTML='<div class="empty">Invalid regular expression.</div>';return;}
+  var hitFiles=0,hitLines=0,html='';
+  INDEX.forEach(function(file){
+    var matches=[];
+    for(var i=0;i<file.lines.length;i++){ if(m.test(file.lines[i])) matches.push(i); }
+    if(!matches.length)return;
+    hitFiles++; hitLines+=matches.length;
+    var shown=matches.slice(0,PERFILE);
+    var rows=shown.map(function(i){
+      return '<div class="ln"><span class="n">'+(i+1)+'</span><span class="t">'+highlight(file.lines[i],m)+'</span></div>';
+    }).join('');
+    var more=matches.length>PERFILE?'<div class="more">+ '+(matches.length-PERFILE)+' more matching lines — <a href="files.html#'+file.f+'">open the file</a></div>':'';
+    html+='<div class="file"><div class="fh"><span class="nm">'+file.f+'</span>'+
+      '<span class="meta"><span>'+matches.length+' match'+(matches.length>1?'es':'')+'</span>'+
+      '<a href="files.html#'+file.f+'">open ↗</a></span></div>'+
+      '<div class="lines">'+rows+more+'</div></div>';
+  });
+  if(!hitFiles){resEl.innerHTML='<div class="empty">No matches for <code>'+esc(q)+'</code>.</div>';return;}
+  statusEl.textContent=hitLines.toLocaleString()+' matching line'+(hitLines>1?'s':'')+' in '+hitFiles+' file'+(hitFiles>1?'s':'')+' · '+INDEX.length+' files indexed';
+  resEl.innerHTML=html;
+}
+
+var t;
+qEl.addEventListener('input',function(){clearTimeout(t);t=setTimeout(run,140)});
+document.getElementById('cs').addEventListener('change',run);
+document.getElementById('re').addEventListener('change',run);
+Array.prototype.forEach.call(document.querySelectorAll('.ex a'),function(a){
+  a.addEventListener('click',function(e){e.preventDefault();qEl.value=a.getAttribute('data-q');run();qEl.focus();});
+});
+</script>
+</body>
+</html>

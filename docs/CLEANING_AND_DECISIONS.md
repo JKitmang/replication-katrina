@@ -256,7 +256,136 @@ artifact of the lag specification.
 
 ---
 
-## 4. Practical reading order
+## 4. Replication-grade decision log
+
+This section restates every cleaning decision as an **operational rule** — exact
+thresholds, variable names, and the file where it lives — so a third party can
+reproduce the estimation samples. It is grounded in both the `.do` files and the
+published paper (AER 2012, 102(5): 2048–2082; Eq. 1, Section I and the online
+appendix). Each rule names where to change it for a new-years run.
+
+### D1 · Geographic & school exclusions
+- **Louisiana — drop directly-hit districts.** Exclude Katrina-landfall parishes
+  **Orleans, Jefferson, St. Bernard, Plaquemines** and Rita-landfall parishes
+  **Cameron, Calcasieu** (in code: `district_code==10 | ==12` → `cameron_calcasieu`,
+  folded into `katrina_district2`; see `alt_standardize.do`). These schools were
+  directly damaged.
+- **Drop evacuee-only schools.** Exclude any school with **> 70 % evacuees**
+  (`percent_katrina >= .7`). In the paper's sample the max non-excluded share is
+  56 % (LA) / 24.7 % (Houston).
+- **Houston:** no parish exclusion — HISD is the receiving district.
+
+### D2 · Who is an "evacuee," and the 2005-06 anchor
+- **Houston:** HISD recorded a Katrina/Rita **location code only in 2005-06**.
+  `katrina = (code non-missing)`, **carried forward to 2006** (`l.katrina`),
+  **missing before 2005** then set to **0** (`attendence.do`, `merge_c.do`). Rita
+  students are included.
+- **Louisiana:** evacuees are new arrivals from the affected parishes; `rita`
+  folded into `katrina_sum` (`replace katrina_sum=1 if rita==1`); `everkatrina =
+  max(katrina_sum)` over a student's years (`alt_standardize.do`).
+- **Consequence:** the estimation sample is **conditioned on being enrolled in
+  2005-06** (`enroll_0506` in `merge_c.do`), the only year status is observed.
+- *Why the measure is trustworthy:* Texas excluded evacuee scores from
+  accountability in 2005-06 (included from 2006-07) and Louisiana exempted all
+  schools in 2005-06, giving schools an incentive to flag evacuees accurately.
+
+### D3 · Test scores — validity, retakes, standardization
+- **Invalid-score filters (Houston, `taks_append.do`):** blank raw & scale scores
+  when "met-minimum" is `?`, missing, or `99`; drop id `9000000000`; drop exact
+  duplicates.
+- **Retakes → use the minimum.** When a student has several scores in a
+  subject-year, the package keeps **both** the min and the mean but the analysis
+  uses the **minimum** (`taks_scale_min_*`; LA `collapse (min)` in `alt_scale.do`).
+  Rationale: retakers mostly failed then were coached, so the higher score
+  overstates achievement.
+- **Standardize to SD within grade × year.** Two distinct mechanisms:
+  - **Houston TAKS** uses **state-published statewide grade×year mean/SD
+    constants**, hardcoded in `merge_c.do` for grades 3–11, **years 2002–2008**
+    (`taks_sd_min_math`/`_read`); an alternative uses **2003-04** moments
+    (`taks_sdalt_*`). Legacy Stanford/Aprenda are standardized **from the data**,
+    within grade×year, **excluding evacuees**.
+  - **Louisiana** computes mean/SD **from the data** by grade×year
+    (`alt_standardize.do` → `la_means.dta`), over a standardizing sample of
+    **never-evacuees in non-Katrina districts with school evacuee share < 70 %**.
+    `alt_standardize_2.do` instead fixes moments to **2003-04** and, because only
+    grades 4/8/10 were tested pre-Katrina, applies **grade-4 moments to grades
+    3–5, grade-8 to 6–8, grade-10 to grade 9**.
+- **Grade-12 TAKS blanked** (all retakers); scores blanked below the first tested
+  grade.
+
+### D4 · Peer-exposure (the treatment)
+- `katrina_frac = (# evacuees) / enrollment`, built at **campus**, **grade**, and
+  (Houston grades 1–5, via teacher links) **class** level; **0 in every pre-2005-06
+  year**. The published headline uses the **grade-level** share
+  (`Katrina_Fraction` for grade *g* in school *j*); campus/class are robustness.
+- **2006 evacuee status/quartile carried forward from 2005** (status fixed at
+  arrival).
+- By-**gender**, by-**race**, by-**econ-disadvantage**, and by-**quartile**
+  interacted shares are built the same way (`merge_c.do`).
+- **School-year date convention:** observation date = **late October of year t**
+  (Houston) and **March of year t+1** (Louisiana).
+
+### D5 · The instrument (Houston only)
+- Instrument the endogenous **late-October** share with (i) the **September-13-2005**
+  evacuee share and (ii) the share living in **Red Cross shelters**, **excluding**
+  residents of **Reliant Stadium / Astrodome / George R. Brown Convention Center**
+  (`katrina_enroll_noRGB_9_13_05 = 9_13 − astrodome − reliant_center − george_brown
+  − reliant_arena`) — those students almost all changed schools within ~2 months,
+  so only the non-mega-shelter inflow is plausibly exogenously placed.
+- 9/13 total enrollment is unobserved → estimated as
+  `enroll_campus_05 − katrina_10_31 + katrina_9_13`.
+- Any school **not on HISD's evacuee list is assumed to have 0 evacuees**;
+  instruments are 0 for years < 2005. **No comparable instrument exists for LA.**
+
+### D6 · Imputation & missing data
+- **Time-invariant traits** (`female`, `ethnicity`, `dob`) imputed forward/backward
+  within student; **every imputed cell is flagged** (`flag_*_impute`). DOB imputed
+  only for `year >= 1996` (first year provided).
+- **Grade** imputed by normal grade progression from the nearest observed grade
+  (cap 12; drop if `< −2`; `flag_grade_impute`).
+- **Missing discipline record ⇒ 0 infractions** (`recode … .=0`).
+- Drop students with demographic data but **no attendance record**
+  (`merge_demog==2`).
+- **Attendance:** where `perc_attn` is missing, recompute
+  `100 × days_present / days_enrolled` (`attendence.do`).
+
+### D7 · Houston regression-sample frame (`merge_c.do`)
+`keep if year>=2002` · keep `grade` non-missing (enrolled late October) and
+`perc_attn` non-missing · restrict to `enroll_0506` · drop grade < 1 · blank
+grade-12 scores. **Maximum-grade correction** (`maxgrade2`): a long block of
+campus-specific rules, set by **visual inspection of enrollment-by-grade counts**,
+identifies each school's true top grade (rule of thumb: grade *Y* is the top grade
+if next-year enrollment in *Y+1* ≤ ½ of this-year *Y*; high schools forced to
+max = 12) so students who "age out" of a school are not counted as switchers.
+
+### D8 · Baseline quartiles (`quartile_data.do`)
+Sort on the **2004** TAKS score (fallback **2003**), within grade×year, `nq(4)`.
+**Blank quartiles for thin cells:** `grade<3`; `grade==3 & year∈{2005,2006}`;
+`grade==4 & year==2006`. `quintile_data.do` = `nq(5)`; `placebo_quartile_data.do`
+shifts one year earlier (2003, fallback 2002) for the falsification test.
+
+### D9 · Controls, fixed effects, inference (paper Eq. 1)
+Controls `X`: **female, white, African American, Hispanic, Asian, Native American,
+free-lunch, reduced-price lunch, economically disadvantaged** (Other-econ and
+Native American are **HISD-only**). Plus **grade** effects, **year** effects,
+**grade×year**, and **school fixed effects** (`absorb(campus)` / school dummies);
+the value-added term adds the **lagged pre-Katrina score interacted with years
+since the lagged exam** (`LagYear`). **SEs clustered by school** (by **grade** in
+the enrollment-disruption tables).
+
+### D10 · Time windows & placebo
+Core panel **2003-04 → 2006-07**; LA placebo/pre-trend back to **1999-00**
+(grade 4). The placebo assigns **2005-06 shares to 2004-05** (zeroed in 2003); the
+Houston classroom "bad-apple" analysis is limited to **2004-05 & 2005-06**.
+
+> **Tip.** Every rule above is locatable with the
+> [Search-code page](../website/search.html): e.g. search `percent_katrina`,
+> `enroll_0506`, `taks_scale_min`, `katrina_frac_noRGB_9_13`, `flag_grade_impute`,
+> or `maxgrade2` to jump to the exact lines.
+
+---
+
+## 5. Practical reading order
 
 To understand the package end-to-end, read the (now-commented) files in this
 order:

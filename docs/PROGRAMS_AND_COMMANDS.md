@@ -13,6 +13,66 @@ appears, with the variation across files noted.
 
 ---
 
+## Part 0 — The repeated routines ("de-facto programs")
+
+The authors wrote **no Stata `program` / `program define` blocks** (a full-text
+search for `program` finds only the word in comments — try it on the
+[Search-code page](../website/search.html)). What they *do* reuse are **two large
+blocks of data-preparation code that are copied, nearly verbatim, into dozens of
+files** — these are the de-facto "programs" of the package. Knowing them means you
+read each analysis file's first ~150 lines once and then skim them everywhere else.
+Because they are copied (not `include`d), **any change — a year, a path, a control
+— must be made in every copy**; the Search-code page is the fastest way to find
+all copies.
+
+### Routine 1 — the **Louisiana analysis preamble**
+*Signature to find every copy:* search `la_prepped_revisionFULL_SAMPLE` (or
+`alternative_standardization`).
+
+**What it does (in order):** `use` the prepped LA student panel
+(`la_prepped_revisionFULL_SAMPLE.dta`); merge the standardized scores
+(`alternative_standardization.dta`); build each student's best **pre-2006** score
+(`math0005`/`ela0005`) and the most-recent **pre-Katrina lag** (`math_lag`/`ela_lag`,
+capped so the lag is always pre-treatment); sort incumbents into **baseline
+achievement quartiles** (`quantiles … nq(4) stable`, by `grade_num`×`year`); build
+**grade×year** interactions (`xi i.grade_num*i.year`); apply the **sample window**
+(`keep if year>=2000 & year<=2007`, `grade_num` 4–10, drop thin grade/year cells);
+define the **lag sample** (grades/years for which a pre-Katrina score exists); and
+merge in the **discipline** and **test-administrator** files.
+
+**Where it appears (24 files):** `analysis_revision_linear`,
+`quartile_analysis_revision_d`, `…_alt_standard2`, `…_trends`, `…_0405inst`,
+`…_full_b_tests`, `…_full_b_tests_nobon`, `…_full_FE_b`, `…_full_scale`,
+`…_full_trends_b`, `…_quintiles`, `epple_romano_f_{math,ela}_grade_fullintb`
+(+ `_nolag`, `_nolagint`), `summary_stats_la`, `school_level_means`,
+`check_non_test_takers2`, `extra_stuff`. (Its inputs are built by `alt_scale`,
+`alt_standardize`, `alt_standardize_2`.)
+
+### Routine 2 — the **Houston analysis preamble**
+*Signature to find every copy:* search `katrina_data.dta` (or `lagyears_`).
+
+**What it does (in order):** `use` the incumbent file (`katrina_data.dta`; some
+files start from `hisd_data.dta`); `xtset id year`; build **pre-Katrina (`<=2004`)
+lags** of math, reading, attendance and infractions, each with a
+"years-since-lag" counter; merge the **baseline quartiles**
+(`pre_katrina_quartiles.dta`); (re)build the **evacuee fractions** at campus /
+grade / class level and the **by-quartile evacuee shares**; build **grade×year**
+dummies; apply sample restrictions; and loop over **grade level**
+(`elem`, `midhigh`).
+
+**Where it appears (≈40 files):** the entire `katrina_by_quartiles_*` family,
+`katrina_iv_c` / `katrina_iv_c_grade`,
+`katrina_iv_gender_ethnicity_noshelter` / `…_grade`,
+`katrina_placebotest_c` / `…_grade`, and `extra_stuff_houston`.
+
+> The smaller reusable fragments **inside** these two preambles — the
+> standardization loop, the lag builder, the quartile sorter, the evacuee-fraction
+> generator, the Sept-13-2005 instrument, the `areg`/`ivreg` estimators, and the
+> `suest`+`test` model battery — are catalogued individually as Idioms 1–8 in
+> Part II below.
+
+---
+
 ## Part I — Third-party (SSC) commands the package requires
 
 | Command | What it does | Where it's used | Install |

@@ -86,14 +86,17 @@ and the [program map](#8-program--tablefigure-map) below.
 Imberman Replication/
 ├── README.md                     ← you are here (detailed replication guide)
 ├── master.do                     ← single entry point / canonical run order
-├── w15291.pdf                    ← NBER working-paper version
+├── imberman-kugler-sacerdote-2012-aer.pdf  ← published paper (AER 2012, 102(5):2048–82)
 ├── 20091305_app.pdf              ← published online appendix (App. Tables 1–46)
+├── w15291.pdf                    ← earlier NBER working-paper version
 ├── LICENSE.txt
 ├── docs/
 │   ├── CLEANING_AND_DECISIONS.md ← the cleaning pipeline + every key judgment call
 │   └── PROGRAMS_AND_COMMANDS.md  ← the reusable code routines & SSC commands used
-├── website/                      ← self-contained HTML version of this README
-│   └── index.html
+├── website/                      ← static replication site
+│   ├── index.html                ← overview (this README, formatted)
+│   ├── files.html                ← in-page browser/viewer for every file
+│   └── search.html               ← full-text keyword search across all dofiles
 └── programs/                     ← all 80 Stata .do files (now fully commented)
     ├── replication-readme.pdf    ← authors' original one-page readme (kept for reference)
     └── *.do

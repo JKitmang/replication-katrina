@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Code &amp; files · Katrina's Children replication</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --muted:#5b6470; --line:#e2e5ea; --bg:#ffffff;
+    --panel:#f6f7f9; --accent:#7a1f2b; --accent2:#0b4f6c; --code:#f0f2f4;
+    --cmt:#6a8a5b; --kw:#9a4a16; --str:#0b6e8c; --mac:#7a1f9a; --num:#246;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;color:var(--ink);background:var(--bg);
+    font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent2);text-decoration:none}a:hover{text-decoration:underline}
+  code,kbd{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace}
+
+  header.site{border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;background:var(--bg)}
+  header.site .inner{max-width:1320px;margin:0 auto;padding:11px 22px;display:flex;align-items:baseline;gap:14px}
+  header.site .brand{font-weight:700}header.site .brand span{color:var(--accent)}
+  header.site .tag{color:var(--muted);font-size:13px}
+  header.site nav{margin-left:auto;font-size:14px;display:flex;gap:18px}
+
+  .wrap{max-width:1320px;margin:0 auto;display:grid;grid-template-columns:330px 1fr;gap:0;align-items:start}
+  aside{border-right:1px solid var(--line);position:sticky;top:49px;height:calc(100vh - 49px);overflow:auto;padding:14px 0}
+  .search{padding:0 14px 10px}
+  .search input{width:100%;padding:8px 11px;border:1px solid var(--line);border-radius:7px;font-size:14px}
+  .search .cnt{font-size:12px;color:var(--muted);margin-top:6px}
+  .grp{margin:6px 0 2px}
+  .grp > .h{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);padding:8px 16px 4px;font-weight:700}
+  .item{display:block;padding:6px 16px 6px 18px;border-left:2px solid transparent;cursor:pointer}
+  .item:hover{background:var(--panel)}
+  .item.active{background:#eef4f7;border-left-color:var(--accent2)}
+  .item .nm{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12.5px;color:var(--ink);word-break:break-all}
+  .item .ds{font-size:11.5px;color:var(--muted);margin-top:1px;line-height:1.35}
+  .item .mt{font-size:10.5px;color:#94a0ad;margin-top:2px}
+  .tag{display:inline-block;font-size:10px;font-weight:600;background:#eef1f4;color:#475;border-radius:4px;padding:1px 5px;margin:2px 4px 0 0}
+  .tag.t{background:#fbeef0;color:var(--accent)}
+
+  main{min-width:0;min-height:calc(100vh - 49px)}
+  .vh{position:sticky;top:49px;background:var(--bg);border-bottom:1px solid var(--line);padding:13px 24px;z-index:10}
+  .vh h1{font-size:17px;margin:0;font-family:"SF Mono",ui-monospace,Menlo,monospace;word-break:break-all}
+  .vh .sub{font-size:12.5px;color:var(--muted);margin-top:4px;display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .vh .sub a{font-size:12.5px}
+  .vbody{padding:0 0 60px}
+  .welcome{padding:48px 36px;max-width:760px}
+  .welcome h2{font-size:22px;margin:0 0 10px}
+  .welcome p{color:#33383f}
+  .purpose{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--accent2);
+    margin:18px 24px 0;padding:12px 15px;border-radius:7px;font-size:13.5px;white-space:pre-wrap}
+  .purpose b{color:var(--ink)}
+
+  .code{margin:18px 0 0;overflow:auto;font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;line-height:1.5}
+  table.src{border-collapse:collapse;width:100%}
+  table.src td{vertical-align:top;padding:0}
+  td.ln{text-align:right;color:#b3bcc6;background:#fafbfc;border-right:1px solid var(--line);
+    padding:0 10px;user-select:none;width:1%;white-space:nowrap}
+  td.cd{padding:0 18px;white-space:pre;width:100%}
+  .c-cmt{color:var(--cmt)} .c-kw{color:var(--kw);font-weight:600} .c-str{color:var(--str)}
+  .c-mac{color:var(--mac)} .c-num{color:var(--num)} .c-hdr{color:#8a6d3b}
+
+  .doc{padding:8px 36px 40px;max-width:880px}
+  .doc h1{font-size:25px;margin:24px 0 8px;border-bottom:2px solid var(--accent);padding-bottom:6px}
+  .doc h2{font-size:20px;margin:26px 0 8px;border-bottom:1px solid var(--line);padding-bottom:5px}
+  .doc h3{font-size:16px;margin:20px 0 6px}
+  .doc p{margin:0 0 11px}.doc ul,.doc ol{margin:0 0 11px;padding-left:24px}.doc li{margin:3px 0}
+  .doc code{background:var(--code);padding:.1em .35em;border-radius:3px;font-size:.88em}
+  .doc pre{background:#0f1722;color:#e7edf3;padding:13px 15px;border-radius:8px;overflow:auto;font-size:12.5px;line-height:1.5}
+  .doc pre code{background:none;color:inherit;padding:0}
+  .doc blockquote{margin:0 0 12px;padding:6px 14px;border-left:3px solid var(--accent2);background:var(--panel);color:#444;border-radius:0 6px 6px 0}
+  .doc table{border-collapse:collapse;width:100%;font-size:13px;margin:0 0 14px}
+  .doc th,.doc td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+  .doc thead th{background:var(--panel)}
+  .doc hr{border:none;border-top:1px solid var(--line);margin:20px 0}
+  .doc a{word-break:break-word}
+
+  .loading{padding:40px 36px;color:var(--muted)}
+  iframe.pdf{width:100%;height:calc(100vh - 120px);border:0;display:block;background:#525659}
+  .pdfbar{padding:10px 24px;font-size:13px;color:var(--muted);border-bottom:1px solid var(--line);background:var(--panel)}
+  @media (max-width:880px){
+    .wrap{grid-template-columns:1fr}
+    aside{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line);max-height:300px}
+  }
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="inner">
+    <span class="brand">Replication&nbsp;<span>Materials</span></span>
+    <span class="tag">Katrina's Children · code &amp; files</span>
+    <nav>
+      <a href="index.html">Overview</a>
+      <a href="files.html">Browse files</a>
+      <a href="#w15291.pdf">Paper</a>
+      <a href="#20091305_app.pdf">Appendix</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <aside>
+    <div class="search">
+      <input id="q" type="search" placeholder="Filter files by name, description, table…" autocomplete="off">
+      <div class="cnt" id="cnt"></div>
+    </div>
+    <div id="list"></div>
+  </aside>
+  <main>
+    <div class="vh">
+      <h1 id="vtitle">Code &amp; files</h1>
+      <div class="sub" id="vsub">Select a file from the left to view it.</div>
+    </div>
+    <div class="vbody" id="vbody">
+      <div class="welcome">
+        <h2>Browse the replication package</h2>
+        <p>Every Stata <code>.do</code> file, the master script, and the documentation are listed on the left, grouped by role and tagged with the paper table each produces. Click any file to read it here — <code>.do</code> files are shown with line numbers, Stata syntax highlighting, and the documentation header parsed out; the Markdown docs are rendered in place.</p>
+        <p>Use the filter box to jump to a file by name, by what it does, or by table (try <code>T5</code>, <code>quartile</code>, <code>instrument</code>, or <code>standardize</code>). The raw text and a download link for each file are in the viewer header.</p>
+        <p style="color:var(--muted);font-size:13px">Note: this browser loads files from the package over the local server, so open it through the served URL (e.g. <code>http://localhost:8745/website/files.html</code>), not as a bare file.</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+/* ---------------- file manifest ---------------- */
+const FILES = [
+ {g:"Documentation",f:"README.md",p:"../README.md",l:420,t:["guide"],d:"Detailed replication guide: data access, run order, full table map, and the new-years checklist."},
+ {g:"Documentation",f:"master.do",p:"../master.do",l:214,t:["run"],d:"Single entry point: path globals, SSC installs, and the canonical run order."},
+ {g:"Documentation",f:"docs/CLEANING_AND_DECISIONS.md",p:"../docs/CLEANING_AND_DECISIONS.md",l:276,t:["cleaning"],d:"Narrative of both cleaning pipelines and the eight cross-cutting analytical decisions."},
+ {g:"Documentation",f:"docs/PROGRAMS_AND_COMMANDS.md",p:"../docs/PROGRAMS_AND_COMMANDS.md",l:207,t:["commands"],d:"The SSC dependencies and the eight reusable code idioms the package is built from."},
+
+ {g:"Paper & appendix",f:"w15291.pdf",p:"../w15291.pdf",l:0,t:["paper"],d:"NBER working-paper version: main text, Tables 1-11, Figures 1-6."},
+ {g:"Paper & appendix",f:"20091305_app.pdf",p:"../20091305_app.pdf",l:0,t:["appendix"],d:"Published online appendix: Appendix Tables 1-46 and Figures 1-7."},
+
+ {g:"Cleaning · Houston",f:"attendence.do",p:"../programs/attendence.do",l:166,t:["build"],d:"Builds the attendance/enrollment panel and the Katrina/Rita evacuee flag (carried 2005 to 2006)."},
+ {g:"Cleaning · Houston",f:"demographics_clean.do",p:"../programs/demographics_clean.do",l:263,t:["build"],d:"Harmonizes yearly demographic files (race, gender, lunch, DOB, program flags)."},
+ {g:"Cleaning · Houston",f:"taks_append.do",p:"../programs/taks_append.do",l:322,t:["build"],d:"Appends all TAKS files, cleans bad scores, keeps the min over retakes, reshapes to student-year."},
+ {g:"Cleaning · Houston",f:"discipline.do",p:"../programs/discipline.do",l:562,t:["build"],d:"Assembles yearly disciplinary records into student-year infraction counts."},
+ {g:"Cleaning · Houston",f:"merge_c.do",p:"../programs/merge_c.do",l:788,t:["build","instrument"],d:"Master merge: standardized scores, evacuee shares (campus/grade/class), the Sept-13-2005 instrument, quartiles."},
+
+ {g:"Cleaning · Louisiana",f:"alt_scale.do",p:"../programs/alt_scale.do",l:123,t:["build"],d:"Cleans raw LA LEAP/iLEAP/GEE files keeping achievement scale scores (min over retakes)."},
+ {g:"Cleaning · Louisiana",f:"alt_standardize.do",p:"../programs/alt_standardize.do",l:202,t:["build"],d:"Standardizes LA scale scores within grade-by-year using non-evacuee moments; builds lags."},
+ {g:"Cleaning · Louisiana",f:"alt_standardize_2.do",p:"../programs/alt_standardize_2.do",l:180,t:["build","A38"],d:"Alternative LA standardization fixed to a single base year (2003-04)."},
+ {g:"Cleaning · Louisiana",f:"school_level_means.do",p:"../programs/school_level_means.do",l:494,t:["build"],d:"Collapses LA data to school level (evacuee shares by quartile) for placebo/pre-trend tests."},
+
+ {g:"Dataset construction",f:"quartile_data.do",p:"../programs/quartile_data.do",l:91,t:["build"],d:"Assigns each incumbent a pre-Katrina (2004, else 2003) achievement quartile."},
+ {g:"Dataset construction",f:"quintile_data.do",p:"../programs/quintile_data.do",l:91,t:["A6"],d:"Quintile version of the baseline-achievement sort."},
+ {g:"Dataset construction",f:"placebo_quartile_data.do",p:"../programs/placebo_quartile_data.do",l:85,t:["build"],d:"Baseline quartiles shifted one year earlier for the placebo/falsification test."},
+
+ {g:"Summary statistics",f:"summary_stats_la.do",p:"../programs/summary_stats_la.do",l:554,t:["T1","A2"],d:"Louisiana descriptive statistics, evacuees vs. incumbents."},
+ {g:"Summary statistics",f:"sumstats_houston.do",p:"../programs/sumstats_houston.do",l:235,t:["T1"],d:"Houston descriptives and means split by the Sept-13-2005 evacuee-share bin."},
+ {g:"Summary statistics",f:"sumstats_b.do",p:"../programs/sumstats_b.do",l:185,t:["T1","A2"],d:"Houston summary stats with baseline quartiles/lags (school-weighted)."},
+
+ {g:"Main analysis",f:"analysis_revision_linear.do",p:"../programs/analysis_revision_linear.do",l:1478,t:["T2","T5","A12-13"],d:"Main LA linear / difference-in-differences driver: evacuee-incumbent gaps and reduced-form effects."},
+ {g:"Main analysis",f:"katrina_nonkatrina.do",p:"../programs/katrina_nonkatrina.do",l:342,t:["T2"],d:"Houston within-school evacuee-incumbent gaps (campus-grade-year FE)."},
+ {g:"Main analysis",f:"katrina_by_quartiles_va_grade_statestd.do",p:"../programs/katrina_by_quartiles_va_grade_statestd.do",l:319,t:["T3","T10"],d:"Houston grade-level DiD on statewide-standardized TAKS (and attendance/discipline)."},
+ {g:"Main analysis",f:"katrina_iv_gender_ethnicity_noshelter_grade.do",p:"../programs/katrina_iv_gender_ethnicity_noshelter_grade.do",l:241,t:["T3","T10","A40"],d:"Houston grade-level evacuee-share effects by gender and race."},
+ {g:"Main analysis",f:"katrina_placebotest_grade.do",p:"../programs/katrina_placebotest_grade.do",l:163,t:["T3"],d:"Placebo test assigning 2005-06 shares to pre-Katrina years (grade level)."},
+ {g:"Main analysis",f:"katrina_by_quartiles_lim_test_fullint_math.do",p:"../programs/katrina_by_quartiles_lim_test_fullint_math.do",l:214,t:["T4","A9-10"],d:"Houston linear-in-means / above-below-median evacuee by quartile, MATH."},
+ {g:"Main analysis",f:"katrina_by_quartiles_lim_test_fullint_read.do",p:"../programs/katrina_by_quartiles_lim_test_fullint_read.do",l:215,t:["T4","A9-10"],d:"Houston linear-in-means evacuee by quartile, READING."},
+ {g:"Main analysis",f:"katrina_by_quartiles_pre_katrina_ols.do",p:"../programs/katrina_by_quartiles_pre_katrina_ols.do",l:193,t:["T4"],d:"Pre-Katrina OLS benchmark rows for the linear-in-means tables."},
+ {g:"Main analysis",f:"quartile_analysis_revision_d.do",p:"../programs/quartile_analysis_revision_d.do",l:1602,t:["T5","T7","A15-43"],d:"The Louisiana workhorse: the 4x4 evacuee-quartile by incumbent-quartile matrix and bad-apple test."},
+ {g:"Main analysis",f:"epple_romano_f_math_grade_fullintb.do",p:"../programs/epple_romano_f_math_grade_fullintb.do",l:855,t:["T6","A14"],d:"Epple-Romano linear-in-means test, MATH (peer mean instrumented by evacuee contribution)."},
+ {g:"Main analysis",f:"epple_romano_f_ela_grade_fullintb.do",p:"../programs/epple_romano_f_ela_grade_fullintb.do",l:855,t:["T6","A14"],d:"Epple-Romano linear-in-means test, ELA."},
+ {g:"Main analysis",f:"quartile_analysis_revision_full_b_tests_nobon.do",p:"../programs/quartile_analysis_revision_full_b_tests_nobon.do",l:764,t:["T8","A20"],d:"Peer-structure model tests (monotonicity / invidious / boutique), no Bonferroni."},
+ {g:"Main analysis",f:"school_level_placebo_b.do",p:"../programs/school_level_placebo_b.do",l:145,t:["T9","A25-26"],d:"School-level placebo: future evacuee share vs. earlier school performance."},
+ {g:"Main analysis",f:"school-trend.do",p:"../programs/school-trend.do",l:172,t:["T9","A25-26"],d:"School-level pre-trend test on SPS performance scores."},
+
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_va.do",p:"../programs/katrina_by_quartiles_va.do",l:259,t:["A3"],d:"Campus-level VA quartile regressions (reduced form)."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_va_grade.do",p:"../programs/katrina_by_quartiles_va_grade.do",l:279,t:["A3"],d:"Grade-level VA quartile regressions."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_iv_gender_ethnicity_noshelter.do",p:"../programs/katrina_iv_gender_ethnicity_noshelter.do",l:225,t:["A3"],d:"Campus-level evacuee-share effects by gender and race."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_iv_c.do",p:"../programs/katrina_iv_c.do",l:187,t:["A4-5","A41"],d:"Campus-level OLS vs 2SLS using the Sept-13-2005 shelter-excluded instrument."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_iv_c_grade.do",p:"../programs/katrina_iv_c_grade.do",l:148,t:["variant"],d:"Grade-level OLS / first-stage / 2SLS companion to katrina_iv_c."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_va_fe.do",p:"../programs/katrina_by_quartiles_va_fe.do",l:159,t:["A4-5","A41"],d:"Student fixed-effects robustness."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_va_class.do",p:"../programs/katrina_by_quartiles_va_class.do",l:281,t:["A4-5"],d:"Classroom-level evacuee share (elementary, grades 1-5)."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_va_campusgrade.do",p:"../programs/katrina_by_quartiles_va_campusgrade.do",l:163,t:["A4-5"],d:"Campus-by-grade fixed-effects robustness."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_va_campusyear.do",p:"../programs/katrina_by_quartiles_va_campusyear.do",l:169,t:["A4-5"],d:"Campus-by-year fixed-effects robustness (post-Katrina years)."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_va_grade_altstd.do",p:"../programs/katrina_by_quartiles_va_grade_altstd.do",l:169,t:["A4-5"],d:"Alternative-standardization robustness."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_va_outlier.do",p:"../programs/katrina_by_quartiles_va_outlier.do",l:168,t:["A4-5","A41"],d:"Drop schools with over 10% evacuee share."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_va_outlier_8.do",p:"../programs/katrina_by_quartiles_va_outlier_8.do",l:260,t:["A4-5"],d:"Drop schools with over 8% evacuee share (stricter trim)."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_va_intpanel.do",p:"../programs/katrina_by_quartiles_va_intpanel.do",l:259,t:["A4-5"],d:"Interrupted panel (drop the 2004 school year)."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_va_scale.do",p:"../programs/katrina_by_quartiles_va_scale.do",l:165,t:["A4-5"],d:"Unstandardized (raw scale-score) outcome."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_va_totenroll.do",p:"../programs/katrina_by_quartiles_va_totenroll.do",l:167,t:["A4-5"],d:"Evacuee count plus a quartic in total enrollment."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_va_newentrant.do",p:"../programs/katrina_by_quartiles_va_newentrant.do",l:178,t:["A4-5"],d:"New-entrant interaction (student-mobility confound check)."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_va_nozero.do",p:"../programs/katrina_by_quartiles_va_nozero.do",l:263,t:["A4-5"],d:"Restrict to schools with a positive evacuee share."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_0405inst.do",p:"../programs/katrina_by_quartiles_0405inst.do",l:228,t:["A4-5","A41"],d:"Instrument the current share with the eventual share at the pre-Katrina school."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_placebotest_c.do",p:"../programs/katrina_placebotest_c.do",l:165,t:["variant"],d:"Campus-level placebo / falsification test."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_va_quintiles.do",p:"../programs/katrina_by_quartiles_va_quintiles.do",l:141,t:["A6"],d:"Quintile version of the VA quartile regressions."},
+ {g:"Robustness · Houston achievement/behavior",f:"katrina_by_quartiles_attrition.do",p:"../programs/katrina_by_quartiles_attrition.do",l:277,t:["A4-5"],d:"Attrition bounds via three score-imputation rules."},
+
+ {g:"Disruption, selection, switching",f:"katrina_by_quartiles_avgweeklyenroll_b.do",p:"../programs/katrina_by_quartiles_avgweeklyenroll_b.do",l:326,t:["A7","A42"],d:"Average weekly evacuee share + SD of weekly relative enrollment (disruption)."},
+ {g:"Disruption, selection, switching",f:"katrina_by_quartiles_halfyear_enroll.do",p:"../programs/katrina_by_quartiles_halfyear_enroll.do",l:282,t:["A8"],d:"First- vs second-semester evacuee entry (timing of arrival)."},
+ {g:"Disruption, selection, switching",f:"katrina_by_quartiles_testtaking.do",p:"../programs/katrina_by_quartiles_testtaking.do",l:120,t:["A11"],d:"Selection into test-taking (likelihood of taking both exams)."},
+ {g:"Disruption, selection, switching",f:"check_non_test_takers2.do",p:"../programs/check_non_test_takers2.do",l:1644,t:["A11"],d:"School-level test-taker fraction and enrollment-change checks."},
+ {g:"Disruption, selection, switching",f:"katrina_by_quartiles_leave.do",p:"../programs/katrina_by_quartiles_leave.do",l:151,t:["A46"],d:"School-switching / leaving HISD by baseline quartile."},
+ {g:"Disruption, selection, switching",f:"katrina_resources.do",p:"../programs/katrina_resources.do",l:277,t:["A45"],d:"Houston school resources and staffing on the evacuee share."},
+ {g:"Disruption, selection, switching",f:"analyze_school_level2_quartiles_b.do",p:"../programs/analyze_school_level2_quartiles_b.do",l:190,t:["A44"],d:"Louisiana school-level class sizes by evacuee achievement level."},
+
+ {g:"Robustness · Louisiana quartile analysis",f:"quartile_analysis_revision_full_trends_b.do",p:"../programs/quartile_analysis_revision_full_trends_b.do",l:682,t:["A23-24"],d:"School-specific linear time trends (full and post-zeroed)."},
+ {g:"Robustness · Louisiana quartile analysis",f:"quartile_analysis_revision_full_scale.do",p:"../programs/quartile_analysis_revision_full_scale.do",l:526,t:["A29"],d:"Unstandardized LA scale-score outcomes."},
+ {g:"Robustness · Louisiana quartile analysis",f:"quartile_analysis_revision_full_FE_b.do",p:"../programs/quartile_analysis_revision_full_FE_b.do",l:595,t:["A31"],d:"Student fixed effects (pooled LA sample)."},
+ {g:"Robustness · Louisiana quartile analysis",f:"quartile_analysis_revision_alt_standard2.do",p:"../programs/quartile_analysis_revision_alt_standard2.do",l:1353,t:["A38"],d:"Non-evacuee-only standardization (clone of the workhorse)."},
+ {g:"Robustness · Louisiana quartile analysis",f:"quartile_analysis_revision_quintiles.do",p:"../programs/quartile_analysis_revision_quintiles.do",l:529,t:["A36"],d:"Quintiles instead of quartiles (LA)."},
+ {g:"Robustness · Louisiana quartile analysis",f:"quartile_analysis_revision_full_b_tests.do",p:"../programs/quartile_analysis_revision_full_b_tests.do",l:763,t:["variant"],d:"Peer-structure model tests, Bonferroni-adjusted."},
+ {g:"Robustness · Louisiana quartile analysis",f:"quartile_analysis_revision_trends.do",p:"../programs/quartile_analysis_revision_trends.do",l:797,t:["variant"],d:"Time-trends variant (helper)."},
+ {g:"Robustness · Louisiana quartile analysis",f:"quartile_analysis_revision_0405inst.do",p:"../programs/quartile_analysis_revision_0405inst.do",l:674,t:["variant"],d:"Prior-school evacuee-share instrument (LA)."},
+
+ {g:"Linear-in-means variants",f:"epple_romano_f_math_grade_fullintb_nolag.do",p:"../programs/epple_romano_f_math_grade_fullintb_nolag.do",l:838,t:["variant"],d:"Epple-Romano MATH, no lagged-score control."},
+ {g:"Linear-in-means variants",f:"epple_romano_f_ela_grade_fullintb_nolag.do",p:"../programs/epple_romano_f_ela_grade_fullintb_nolag.do",l:838,t:["variant"],d:"Epple-Romano ELA, no lagged-score control."},
+ {g:"Linear-in-means variants",f:"epple_romano_f_math_grade_fullint_nolagint.do",p:"../programs/epple_romano_f_math_grade_fullint_nolagint.do",l:774,t:["variant"],d:"Epple-Romano MATH, lag not interacted with quartile."},
+ {g:"Linear-in-means variants",f:"epple_romano_f_ela_grade_fullint_nolagint.do",p:"../programs/epple_romano_f_ela_grade_fullint_nolagint.do",l:774,t:["variant"],d:"Epple-Romano ELA, lag not interacted with quartile."},
+ {g:"Linear-in-means variants",f:"katrina_by_quartiles_lim_test_fullint.do",p:"../programs/katrina_by_quartiles_lim_test_fullint.do",l:210,t:["variant"],d:"Combined math+read linear-in-means driver."},
+ {g:"Linear-in-means variants",f:"katrina_by_quartiles_lim_test_fullint_nolag.do",p:"../programs/katrina_by_quartiles_lim_test_fullint_nolag.do",l:219,t:["variant"],d:"Combined linear-in-means driver, no lag."},
+ {g:"Linear-in-means variants",f:"katrina_by_quartiles_lim_test_nolag.do",p:"../programs/katrina_by_quartiles_lim_test_nolag.do",l:247,t:["variant"],d:"Linear-in-means, no lag."},
+ {g:"Linear-in-means variants",f:"katrina_by_quartiles_lim_test_fullint_math_nolag.do",p:"../programs/katrina_by_quartiles_lim_test_fullint_math_nolag.do",l:212,t:["variant"],d:"Math linear-in-means, no lag."},
+ {g:"Linear-in-means variants",f:"katrina_by_quartiles_lim_test_fullint_math_nolagint.do",p:"../programs/katrina_by_quartiles_lim_test_fullint_math_nolagint.do",l:215,t:["variant"],d:"Math linear-in-means, lag not interacted."},
+ {g:"Linear-in-means variants",f:"katrina_by_quartiles_lim_test_fullint_read_nolag.do",p:"../programs/katrina_by_quartiles_lim_test_fullint_read_nolag.do",l:212,t:["variant"],d:"Reading linear-in-means, no lag."},
+ {g:"Linear-in-means variants",f:"katrina_by_quartiles_lim_test_fullint_read_nolagint.do",p:"../programs/katrina_by_quartiles_lim_test_fullint_read_nolagint.do",l:213,t:["variant"],d:"Reading linear-in-means, lag not interacted."},
+ {g:"Linear-in-means variants",f:"katrina_by_quartiles_lim_test_fullint_math_temp.do",p:"../programs/katrina_by_quartiles_lim_test_fullint_math_temp.do",l:192,t:["scratch"],d:"Scratch copy of the math linear-in-means driver."},
+
+ {g:"Auxiliary / scratch",f:"extra_stuff.do",p:"../programs/extra_stuff.do",l:720,t:["aux"],d:"Auxiliary LA calculations: quasi-random-placement checks and numbers cited in the text."},
+ {g:"Auxiliary / scratch",f:"extra_stuff_houston.do",p:"../programs/extra_stuff_houston.do",l:155,t:["aux"],d:"Auxiliary Houston calculations (lag/quartile correlation checks)."},
+];
+
+/* ---------------- build sidebar ---------------- */
+const listEl=document.getElementById('list');
+const groups=[];
+FILES.forEach(function(x){var g=groups.find(function(o){return o.g===x.g});if(!g){g={g:x.g,items:[]};groups.push(g)}g.items.push(x);});
+function tagHtml(t){return t.map(function(z){return '<span class="tag '+(/^[TA]\d/.test(z)?'t':'')+'">'+z+'</span>'}).join('')}
+function kindLabel(x){return /\.pdf$/.test(x.f)?'PDF document':/\.md$/.test(x.f)?(x.l+' lines · Markdown'):(x.l+' lines · Stata');}
+function renderList(filter){
+  const fl=(filter||'').toLowerCase().trim();
+  listEl.innerHTML='';var shown=0;
+  groups.forEach(function(g){
+    var items=g.items.filter(function(x){return !fl||(x.f+' '+x.d+' '+x.t.join(' ')+' '+x.g).toLowerCase().indexOf(fl)>=0});
+    if(!items.length)return;
+    var gd=document.createElement('div');gd.className='grp';
+    gd.innerHTML='<div class="h">'+g.g+'</div>';
+    items.forEach(function(x){shown++;
+      var it=document.createElement('div');it.className='item';it.dataset.p=x.p;
+      it.innerHTML='<div class="nm">'+x.f+'</div><div class="ds">'+x.d+'</div>'+
+        '<div class="mt">'+kindLabel(x)+' · '+tagHtml(x.t)+'</div>';
+      it.onclick=function(){openFile(x,it)};
+      gd.appendChild(it);
+    });
+    listEl.appendChild(gd);
+  });
+  document.getElementById('cnt').textContent=shown+' of '+FILES.length+' files';
+}
+document.getElementById('q').addEventListener('input',function(e){renderList(e.target.value)});
+
+/* ---------------- helpers ---------------- */
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+const KW=new RegExp('\\b('+(
+ 'use|save|saveold|merge|append|collapse|reshape|gen|generate|egen|replace|drop|keep|sort|gsort|'+
+ 'by|bysort|foreach|forvalues|forv|while|local|global|macro|areg|reg|regress|ivreg|ivreg2|ivregress|'+
+ 'xtreg|xtset|tsset|xi|test|testparm|lincom|nlcom|suest|estimates|est|predict|margins|summarize|summ|sum|'+
+ 'tabulate|tab|tabstat|table|count|label|rename|renames|recode|destring|tostring|encode|decode|set|clear|'+
+ 'cd|log|capture|cap|quietly|qui|noisily|outreg2|outreg|outsheet|quantiles|postfile|post|postclose|order|'+
+ 'aorder|compress|duplicates|if|in|else|return|program|end|matrix|mat|scalar|format|note|describe')+
+ ')\\b','g');
+
+function hiCode(text){
+  var lines=text.split('\n');var inBlock=false;var rows='';
+  lines.forEach(function(raw,i){
+    var line=raw.replace(/\t/g,'    ');
+    var html;
+    var trimmed=line.replace(/^\s+/,'');
+    if(inBlock){
+      html='<span class="c-cmt">'+esc(line)+'</span>';
+      if(line.indexOf('*/')>=0)inBlock=false;
+    } else if(/^\s*\/\*/.test(line)){
+      html='<span class="c-cmt">'+esc(line)+'</span>';
+      if(line.indexOf('*/')<0)inBlock=true;
+    } else if(trimmed.charAt(0)==='*'){
+      var cls=/^\*=|^\*--|^\*\s*[A-Z].*:/.test(trimmed)?'c-hdr':'c-cmt';
+      html='<span class="'+cls+'">'+esc(line)+'</span>';
+    } else {
+      var code=line,cmt='';
+      var ci=line.indexOf('//');
+      if(ci>=0 && (line.indexOf('"')<0 || ci<line.indexOf('"'))){code=line.slice(0,ci);cmt=line.slice(ci);}
+      var h=esc(code)
+        .replace(/("[^"]*")/g,function(m){return '<span class="c-str">'+m+'</span>'})
+        .replace(/\$[A-Za-z_]\w*/g,function(m){return '<span class="c-mac">'+m+'</span>'});
+      h=h.replace(KW,'<span class="c-kw">$1</span>');
+      html=h+(cmt?'<span class="c-cmt">'+esc(cmt)+'</span>':'');
+    }
+    rows+='<tr><td class="ln">'+(i+1)+'</td><td class="cd">'+(html||'&nbsp;')+'</td></tr>';
+  });
+  return '<div class="code"><table class="src"><tbody>'+rows+'</tbody></table></div>';
+}
+
+function parsePurpose(text){
+  var m=text.match(/\*\s*PURPOSE:\s*([\s\S]*?)\n\*\s*(INPUTS:|OUTPUTS:|KEY STEPS:|HARDCODED)/);
+  if(!m)return'';
+  return m[1].split('\n').map(function(l){return l.replace(/^\*\s?/,'').trim()}).join(' ').replace(/\s+/g,' ').trim();
+}
+
+/* ---- minimal markdown renderer (handles our docs) ---- */
+var BT=String.fromCharCode(96); // backtick, kept out of source so the file stays editable
+function mdInline(s){
+  var parts=s.split(BT), out='';
+  for(var k=0;k<parts.length;k++){
+    if(k%2===1){ out+='<code>'+esc(parts[k])+'</code>'; continue; }
+    var t=esc(parts[k]);
+    t=t.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2">$1</a>');
+    t=t.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+    t=t.replace(/(^|[\s(])\*([^*\s][^*]*?)\*(?=[\s).,;:]|$)/g,'$1<em>$2</em>');
+    out+=t;
+  }
+  return out;
+}
+function mdToHtml(md){
+  var fence=BT+BT+BT;
+  var L=md.replace(/\r/g,'').split('\n');var out=[];var i=0;
+  while(i<L.length){
+    var line=L[i];
+    if(line.indexOf(fence)===0){var buf=[];i++;while(i<L.length&&L[i].indexOf(fence)!==0){buf.push(esc(L[i]));i++;}i++;out.push('<pre><code>'+buf.join('\n')+'</code></pre>');continue;}
+    if(/^\s*#{1,6}\s/.test(line)){var n=line.match(/^\s*(#{1,6})/)[1].length;out.push('<h'+n+'>'+mdInline(line.replace(/^\s*#{1,6}\s/,''))+'</h'+n+'>');i++;continue;}
+    if(/^\s*>/.test(line)){var bq=[];while(i<L.length&&/^\s*>/.test(L[i])){bq.push(L[i].replace(/^\s*>\s?/,''));i++;}out.push('<blockquote>'+mdInline(bq.join(' '))+'</blockquote>');continue;}
+    if(/^\s*([-*=_])\1{2,}\s*$/.test(line)){out.push('<hr>');i++;continue;}
+    if(/\|/.test(line)&&i+1<L.length&&/^\s*\|?[\s:|-]+\|[\s:|-]+$/.test(L[i+1])){
+      var head=line.split('|').map(function(c){return c.trim()});
+      if(head[0]==='')head.shift();if(head.length&&head[head.length-1]==='')head.pop();
+      i+=2;var body=[];
+      while(i<L.length&&/\|/.test(L[i])&&L[i].trim()!==''){
+        var cells=L[i].split('|').map(function(c){return c.trim()});
+        if(cells[0]==='')cells.shift();if(cells.length&&cells[cells.length-1]==='')cells.pop();
+        body.push(cells);i++;
+      }
+      var tb='<table><thead><tr>'+head.map(function(h){return '<th>'+mdInline(h)+'</th>'}).join('')+'</tr></thead><tbody>';
+      body.forEach(function(r){tb+='<tr>'+r.map(function(c){return '<td>'+mdInline(c)+'</td>'}).join('')+'</tr>'});
+      tb+='</tbody></table>';out.push(tb);continue;
+    }
+    if(/^\s*[-*]\s+/.test(line)){var ul=[];while(i<L.length&&/^\s*[-*]\s+/.test(L[i])){ul.push('<li>'+mdInline(L[i].replace(/^\s*[-*]\s+/,''))+'</li>');i++;}out.push('<ul>'+ul.join('')+'</ul>');continue;}
+    if(/^\s*\d+\.\s+/.test(line)){var ol=[];while(i<L.length&&/^\s*\d+\.\s+/.test(L[i])){ol.push('<li>'+mdInline(L[i].replace(/^\s*\d+\.\s+/,''))+'</li>');i++;}out.push('<ol>'+ol.join('')+'</ol>');continue;}
+    if(line.trim()===''){i++;continue;}
+    var pb=[line];i++;
+    while(i<L.length&&L[i].trim()!==''&&!/^\s*(#{1,6}\s|[-*]\s|\d+\.\s|>)/.test(L[i])&&L[i].indexOf(fence)!==0&&!/\|/.test(L[i])){pb.push(L[i]);i++;}
+    out.push('<p>'+mdInline(pb.join(' '))+'</p>');
+  }
+  return out.join('\n');
+}
+
+/* ---------------- open a file ---------------- */
+const vtitle=document.getElementById('vtitle'),vsub=document.getElementById('vsub'),vbody=document.getElementById('vbody');
+function openFile(x,el){
+  Array.prototype.forEach.call(document.querySelectorAll('.item.active'),function(n){n.classList.remove('active')});
+  if(el)el.classList.add('active');
+  vtitle.textContent=x.f;
+  vsub.innerHTML=kindLabel(x)+' · '+tagHtml(x.t)+
+    ' · <a href="'+x.p+'" target="_blank">open raw &#8599;</a> · <a href="'+x.p+'" download>download</a>';
+  if(/\.pdf$/.test(x.f)){
+    vbody.innerHTML='<div class="pdfbar">Embedded PDF viewer &mdash; use <a href="'+x.p+'" target="_blank">open raw &#8599;</a> if your browser blocks inline PDFs.</div>'+
+      '<iframe class="pdf" src="'+x.p+'" title="'+x.f+'"></iframe>';
+    window.scrollTo(0,0);return;
+  }
+  vbody.innerHTML='<div class="loading">Loading '+x.f+' &hellip;</div>';
+  fetch(x.p).then(function(r){if(!r.ok)throw new Error(r.status);return r.text()}).then(function(txt){
+    if(/\.md$/.test(x.f)){vbody.innerHTML='<div class="doc">'+mdToHtml(txt)+'</div>';}
+    else{
+      var purpose=parsePurpose(txt);
+      vbody.innerHTML=(purpose?'<div class="purpose"><b>Purpose.</b> '+esc(purpose)+'</div>':'')+hiCode(txt);
+    }
+    window.scrollTo(0,0);
+  }).catch(function(e){vbody.innerHTML='<div class="loading">Could not load this file ('+e.message+'). Make sure you are viewing the site through the local server, not as a file:// path.</div>'});
+}
+
+function byHash(h){if(!h)return null;var x=FILES.find(function(o){return o.f===h});if(!x)x=FILES.find(function(o){return o.p.indexOf(h)>=0});return x;}
+function loadHash(){
+  var h=decodeURIComponent(location.hash.slice(1));var x=byHash(h);if(!x)return;
+  var el=Array.prototype.find.call(document.querySelectorAll('.item'),function(n){return n.dataset.p===x.p});
+  openFile(x,el);if(el)el.scrollIntoView({block:'nearest'});
+}
+renderList('');
+window.addEventListener('hashchange',loadHash);
+loadHash();
+</script>
+</body>
+</html>

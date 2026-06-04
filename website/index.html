@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Replication · Katrina's Children — Imberman, Kugler &amp; Sacerdote</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --muted:#5b6470; --line:#e2e5ea; --bg:#ffffff;
+    --panel:#f6f7f9; --accent:#7a1f2b; --accent2:#0b4f6c; --code:#f0f2f4;
+    --ok:#1e6b3a; --okbg:#e7f3ec;
+    --maxw:1180px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; color:var(--ink); background:var(--bg);
+    font:16px/1.62 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent2); text-decoration:none}
+  a:hover{text-decoration:underline}
+  code,kbd{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:.88em}
+  code{background:var(--code); padding:.1em .35em; border-radius:3px}
+
+  /* top bar */
+  header.site{
+    border-bottom:1px solid var(--line); background:var(--bg);
+    position:sticky; top:0; z-index:20;
+  }
+  header.site .inner{
+    max-width:var(--maxw); margin:0 auto; padding:12px 24px;
+    display:flex; align-items:baseline; gap:14px;
+  }
+  header.site .brand{font-weight:700; letter-spacing:.2px}
+  header.site .brand span{color:var(--accent)}
+  header.site .tag{color:var(--muted); font-size:13px}
+
+  /* hero / article header */
+  .hero{border-bottom:1px solid var(--line); background:linear-gradient(180deg,#fbfbfc,#ffffff)}
+  .hero .inner{max-width:var(--maxw); margin:0 auto; padding:34px 24px 26px}
+  .crumb{font-size:13px; color:var(--muted); margin-bottom:14px}
+  h1.title{font-size:30px; line-height:1.25; margin:0 0 6px; letter-spacing:-.2px}
+  .subtitle{color:var(--muted); font-size:16px; margin:0 0 16px}
+  .authors{font-size:16px; margin:0 0 18px}
+  .meta-grid{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+    gap:14px 28px; border-top:1px solid var(--line); padding-top:16px;
+  }
+  .meta-grid dt{font-size:11px; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); margin-bottom:3px}
+  .meta-grid dd{margin:0; font-size:14px}
+  .badge{display:inline-block; font-size:12px; font-weight:600; padding:3px 9px; border-radius:999px}
+  .badge.warn{background:#fdf0e6; color:#9a4a16}
+  .badge.lang{background:#eef1f4; color:#333; margin:0 5px 5px 0}
+
+  /* layout */
+  .layout{max-width:var(--maxw); margin:0 auto; padding:0 24px; display:grid;
+    grid-template-columns:232px 1fr; gap:40px; align-items:start}
+  nav.toc{position:sticky; top:64px; padding:28px 0; font-size:14px; max-height:calc(100vh - 64px); overflow:auto}
+  nav.toc ol{list-style:none; margin:0; padding:0}
+  nav.toc li{margin:2px 0}
+  nav.toc a{color:var(--muted); display:block; padding:4px 10px; border-left:2px solid transparent; border-radius:0 4px 4px 0}
+  nav.toc a:hover{color:var(--ink); background:var(--panel); text-decoration:none}
+  nav.toc .sub{padding-left:20px; font-size:13px}
+
+  main{padding:28px 0 80px; min-width:0}
+  section{margin:0 0 38px; scroll-margin-top:72px}
+  section > h2{font-size:21px; margin:0 0 12px; padding-bottom:7px; border-bottom:2px solid var(--accent); display:inline-block}
+  h3{font-size:16px; margin:22px 0 8px}
+  p{margin:0 0 12px}
+  ul,ol{margin:0 0 12px; padding-left:22px}
+  li{margin:4px 0}
+
+  .lead{font-size:17px; color:#33383f}
+
+  .callout{background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--accent2);
+    padding:14px 16px; border-radius:6px; margin:0 0 16px; font-size:14.5px}
+  .callout.warn{border-left-color:var(--accent); background:#fdf6f3}
+  .callout .h{font-weight:700; display:block; margin-bottom:4px}
+
+  table.data{border-collapse:collapse; width:100%; font-size:14px; margin:0 0 16px}
+  table.data th, table.data td{border:1px solid var(--line); padding:7px 10px; text-align:left; vertical-align:top}
+  table.data thead th{background:var(--panel); font-size:12px; text-transform:uppercase; letter-spacing:.4px}
+  table.data td code{white-space:nowrap}
+  table.data tr:nth-child(even) td{background:#fcfcfd}
+
+  pre{background:#0f1722; color:#e7edf3; padding:14px 16px; border-radius:8px; overflow:auto; font-size:13px; line-height:1.55; margin:0 0 16px}
+  pre code{background:none; color:inherit; padding:0}
+
+  .pipe{font-family:"SF Mono",ui-monospace,Menlo,monospace; font-size:13px; background:var(--panel);
+    border:1px solid var(--line); border-radius:8px; padding:14px 16px; overflow:auto; line-height:1.5; margin:0 0 16px}
+
+  .downloads{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:12px; margin:0 0 8px}
+  .dl{display:block; border:1px solid var(--line); border-radius:8px; padding:13px 15px; background:var(--bg)}
+  .dl:hover{border-color:var(--accent2); text-decoration:none; background:#fafcfd}
+  .dl .n{font-weight:600; color:var(--ink)}
+  .dl .d{font-size:13px; color:var(--muted); margin-top:2px}
+
+  footer.site{border-top:1px solid var(--line); color:var(--muted); font-size:13px}
+  footer.site .inner{max-width:var(--maxw); margin:0 auto; padding:22px 24px}
+
+  @media (max-width:820px){
+    .layout{grid-template-columns:1fr; gap:0}
+    nav.toc{position:static; max-height:none; border-bottom:1px solid var(--line)}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="inner">
+    <div class="brand">Replication&nbsp;<span>Materials</span></div>
+    <div class="tag">Economic articles with data &amp; code · documentation edition</div>
+    <nav style="margin-left:auto;display:flex;gap:18px;font-size:14px;align-self:center">
+      <a href="index.html">Overview</a>
+      <a href="files.html">Browse files</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="inner">
+    <div class="crumb">Replications &nbsp;›&nbsp; Economics of Education &nbsp;›&nbsp; Peer Effects</div>
+    <h1 class="title">Katrina's Children: Evidence on the Structure of Peer Effects from Hurricane Evacuees</h1>
+    <p class="subtitle">A difference-in-differences / IV study of how hurricane-evacuee classmates affect incumbent students' achievement, attendance, and behavior.</p>
+    <p class="authors"><strong>Scott A. Imberman</strong> · <strong>Adriana D. Kugler</strong> · <strong>Bruce I. Sacerdote</strong></p>
+
+    <dl class="meta-grid">
+      <div><dt>Journal</dt><dd>American Economic Review · 2012, 102(5)</dd></div>
+      <div><dt>Working paper</dt><dd>NBER WP 15291</dd></div>
+      <div><dt>JEL codes</dt><dd>H23 · I21 · J24</dd></div>
+      <div><dt>Software</dt><dd>Stata 11/12</dd></div>
+      <div><dt>Code languages</dt><dd><span class="badge lang">Stata .do</span></dd></div>
+      <div><dt>Programs</dt><dd>80 <code>.do</code> files · 1 master</dd></div>
+      <div><dt>Data availability</dt><dd><span class="badge warn">Restricted / proprietary</span></dd></div>
+      <div><dt>Settings</dt><dd>Houston ISD &amp; Louisiana (statewide)</dd></div>
+    </dl>
+  </div>
+</div>
+
+<div class="layout">
+  <nav class="toc" aria-label="Table of contents">
+    <ol>
+      <li><a href="#abstract">Abstract</a></li>
+      <li><a href="#design">Research design</a></li>
+      <li><a href="#data">Data &amp; availability</a></li>
+      <li><a href="#software">Software</a></li>
+      <li><a href="#contents">Package contents</a></li>
+      <li><a href="#pipeline">Cleaning pipeline</a></li>
+      <li><a href="#run">How to run</a></li>
+      <li><a href="#map">Program → table map</a></li>
+      <li class="sub"><a href="#map-main">Main tables</a></li>
+      <li class="sub"><a href="#map-app">Appendix tables</a></li>
+      <li><a href="#newyears">Re-running with new years</a></li>
+      <li><a href="#downloads">Files &amp; documents</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <section id="abstract">
+      <h2>Abstract</h2>
+      <p class="lead">Hurricanes Katrina and Rita displaced roughly 400,000 schoolchildren in 2005. Because evacuee families were placed by where buses, shelters, and relatives happened to be — not by school choice — the sudden arrival of evacuees into receiving schools provides quasi-random variation in peer composition.</p>
+      <p>The paper estimates how the <strong>share of evacuees</strong> in an incumbent ("native") student's school, grade, and classroom affects that student's test scores (math and reading), attendance, and disciplinary infractions — and, centrally, the <em>structure</em> of those peer effects (linear-in-means vs. monotonicity vs. invidious comparison vs. boutique/ability-grouping vs. "bad apple"). It finds strong support for <strong>monotonic, non-linear</strong> peer effects on achievement, rejects the linear-in-means and invidious-comparison models, and supports the "bad apple" model for <em>behavior</em> but not for test scores.</p>
+    </section>
+
+    <section id="design">
+      <h2>Research design</h2>
+      <p>Identification is a difference-in-differences / value-added specification: incumbent outcome on the evacuee share, with <strong>school fixed effects</strong>, grade effects, year effects, grade×year interactions, demographic controls, and (published version) <strong>lagged pre-Katrina achievement</strong>. The evacuee share is <strong>0 in every pre-2005-06 year</strong>, so identification comes from the change in incumbent outcomes in high- vs. low-evacuee schools after the storms.</p>
+      <div class="callout"><span class="h">The instrument (Houston only)</span>Evacuees re-sorted across schools through the fall of 2005, so the late-October share is endogenous to school quality. The paper instruments it with the <strong>September 13, 2005 evacuee share</strong> — two weeks after landfall, excluding students still in the Astrodome/Reliant/George R. Brown mega-shelters, who almost all relocated within two weeks.</div>
+      <p>For the structure of peer effects, incumbents and evacuees are sorted into <strong>pre-Katrina achievement quartiles</strong>; the evacuee share is split by the quartile evacuees fall in and interacted with the incumbent's own quartile, producing a 4×4 coefficient matrix whose pattern discriminates between competing peer-effect models.</p>
+    </section>
+
+    <section id="data">
+      <h2>Data &amp; availability</h2>
+      <table class="data">
+        <thead><tr><th></th><th>Houston (HISD)</th><th>Louisiana (statewide)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Tests</strong></td><td>TAKS (math &amp; reading)</td><td>LEAP / iLEAP / GEE</td></tr>
+          <tr><td><strong>Core years</strong></td><td>2003-04 → 2006-07</td><td>2003-04 → 2006-07 (placebo to 1999-00)</td></tr>
+          <tr><td><strong>Grades</strong></td><td>1–12</td><td>3–10</td></tr>
+          <tr><td><strong>Outcomes</strong></td><td>scores, attendance, discipline</td><td>scores, discipline</td></tr>
+          <tr><td><strong>Classroom links</strong></td><td>yes (grades 1–5)</td><td>via test-administrator</td></tr>
+          <tr><td><strong>Instrument</strong></td><td>Sept-13-2005 share</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <div class="callout warn"><span class="h">Data are restricted</span>The student-level micro-data are proprietary and cannot be posted. Houston data require a research proposal to the <strong>HISD Research &amp; Accountability Department</strong> (request that the data be provided directly by the authors); Louisiana data come from the <strong>Louisiana Department of Education</strong> (Division of Standards, Assessment &amp; Accountability, via Data Recognition Corporation). This package is therefore a <strong>code + documentation</strong> replication: it shows exactly how every number was produced and lets a reader reproduce the results once they hold the same data — or apply the identical pipeline to new years.</div>
+    </section>
+
+    <section id="software">
+      <h2>Software &amp; dependencies</h2>
+      <p>Developed under <strong>Stata 11/12</strong>; runs in any modern Stata. Three user-written (SSC) commands are required:</p>
+      <pre><code>ssc install outreg2     // exports regression results to the result tables
+ssc install quantiles   // sorts observations into quartile / quintile groups
+ssc install renames     // batch variable renaming (taks_append.do)</code></pre>
+      <p>Everything else — <code>areg</code>, <code>ivreg</code>, <code>ivreg2</code>, <code>xtreg</code>, <code>xi</code>, <code>test</code>, <code>lincom</code>, <code>suest</code>, <code>collapse</code>, <code>reshape</code> — is official Stata. See <a href="../docs/PROGRAMS_AND_COMMANDS.md">PROGRAMS_AND_COMMANDS.md</a> for the eight reusable code idioms the package is built from.</p>
+    </section>
+
+    <section id="contents">
+      <h2>Package contents</h2>
+      <div class="pipe">Imberman Replication/
+├── README.md                     detailed replication guide
+├── master.do                     single entry point / canonical run order
+├── w15291.pdf                    NBER working-paper version
+├── 20091305_app.pdf              published online appendix (App. Tables 1–46)
+├── docs/
+│   ├── CLEANING_AND_DECISIONS.md cleaning pipeline + every key judgment call
+│   └── PROGRAMS_AND_COMMANDS.md  reusable routines &amp; SSC commands
+├── website/index.html            this page
+└── programs/                     80 fully-commented Stata .do files</div>
+      <p>Every <code>.do</code> file now carries a standardized header — purpose, inputs, outputs, the table it produces, and the hardcoded years / paths to change for a new-years run — added as documentation comments only. <strong>No executable code was altered</strong>, so results reproduce exactly.</p>
+    </section>
+
+    <section id="pipeline">
+      <h2>Cleaning pipeline</h2>
+      <h3>Houston (HISD)</h3>
+      <div class="pipe">attendence.do          enrollment, attendance %, evacuee location code → katrina flag
+demographics_clean.do  race / gender / lunch / DOB / program flags
+taks_append.do         TAKS scores (long → wide by subject)
+discipline.do          infraction counts
+        │
+        └──►  merge_c.do   ── MASTER MERGE ──►  hisd_data.dta
+                                                 ├─ katrina_data_with_evacs.dta  (incumbents + evacuees)
+                                                 ├─ katrina_data.dta             (incumbents only)
+                                                 └─ maxgrade.dta
+        quartile_data.do / quintile_data.do / placebo_quartile_data.do  → baseline quartiles</div>
+      <p><code>merge_c.do</code> is the analytic core: it standardizes TAKS scores within grade×year, builds the evacuee shares (campus / grade / class), constructs the Sept-13-2005 instrument, imputes time-invariant traits (with flags), and restricts to students enrolled in 2005-06 — the only year evacuee status is observed.</p>
+      <h3>Louisiana</h3>
+      <div class="pipe">alt_scale.do          collapse raw LEAP/iLEAP/GEE scale scores (min over retakes)
+alt_standardize.do    standardize within grade×year (all test-takers)  → alternative_standardization.dta
+alt_standardize_2.do  standardize using ONLY non-evacuees              → App. Table 38
+school_level_means.do collapse to school level (placebo / pre-trend inputs)</div>
+      <p>Full narrative and the eight cross-cutting decisions (evacuee definition, excluded geographies, standardization choices, peer-measure level, the instrument, quartile sorting, imputation, lagged controls) are in <a href="../docs/CLEANING_AND_DECISIONS.md">CLEANING_AND_DECISIONS.md</a>.</p>
+    </section>
+
+    <section id="run">
+      <h2>How to run</h2>
+      <ol>
+        <li>Open <code>master.do</code> and edit the four <code>global</code> path lines.</li>
+        <li>Install the three SSC commands above.</li>
+        <li>Obtain and stage the data under <code>$raw</code> / <code>$work</code>.</li>
+        <li>Repoint the hardcoded absolute paths inside the <code>.do</code> files (see new-years §, step 2).</li>
+        <li>Un-comment the <code>do</code> lines in order: <strong>A</strong> (LA cleaning) → <strong>B</strong> (Houston cleaning) → <strong>C</strong> (dataset construction) → <strong>D/E</strong> (analysis by table).</li>
+      </ol>
+      <div class="callout"><span class="h">Run order is load-bearing</span><code>merge_c.do</code> consumes the outputs of the four Houston cleaning files; the analysis files consume <code>merge_c.do</code>, <code>quartile_data.do</code>, and the LA standardization outputs. Running an analysis file before its inputs exist fails on a missing <code>.dta</code>.</div>
+    </section>
+
+    <section id="map">
+      <h2>Program → table map</h2>
+      <p>A file can feed several tables; the workhorse <code>quartile_analysis_revision_d.do</code> alone produces Tables 5 &amp; 7 and roughly a dozen appendix tables. Variants ending in <code>_nolag</code> / <code>_nolagint</code> produce the "no-lag" / "lag-not-interacted" rows.</p>
+
+      <h3 id="map-main">Main-text tables</h3>
+      <table class="data">
+        <thead><tr><th>Table</th><th>Program(s)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>T1</strong> Descriptives</td><td><code>summary_stats_la</code>; <code>sumstats_houston</code>; <code>sumstats_b</code></td></tr>
+          <tr><td><strong>T2</strong> Evacuee–native gaps</td><td><code>analysis_revision_linear</code>; <code>katrina_nonkatrina</code></td></tr>
+          <tr><td><strong>T3</strong> DiD, native scores (HOU)</td><td><code>katrina_by_quartiles_va_grade_statestd</code>; <code>katrina_iv_gender_ethnicity_noshelter_grade</code>; <code>katrina_placebotest_grade</code></td></tr>
+          <tr><td><strong>T4</strong> Nonlinear evacuee×quartile (HOU)</td><td><code>katrina_by_quartiles_lim_test_fullint_math</code>; <code>…_read</code>; <code>katrina_by_quartiles_pre_katrina_ols</code></td></tr>
+          <tr><td><strong>T5</strong> Nonlinear 4×4 matrix (LA)</td><td><code>analysis_revision_linear</code>; <code>quartile_analysis_revision_d</code></td></tr>
+          <tr><td><strong>T6</strong> Epple–Romano linear-in-means</td><td><code>epple_romano_f_ela_grade_fullintb</code>; <code>epple_romano_f_math_grade_fullintb</code></td></tr>
+          <tr><td><strong>T7</strong> Bad-apple (evacuee behavior)</td><td><code>quartile_analysis_revision_d</code></td></tr>
+          <tr><td><strong>T8</strong> Peer-structure model tests</td><td><code>quartile_analysis_revision_full_b_tests_nobon</code></td></tr>
+          <tr><td><strong>T9</strong> Class size</td><td><code>school_level_placebo_b</code>; <code>school-trend</code></td></tr>
+          <tr><td><strong>T10</strong> Attendance &amp; discipline DiD (HOU)</td><td><code>katrina_by_quartiles_va_grade_statestd</code>; <code>katrina_iv_gender_ethnicity_noshelter_grade</code></td></tr>
+        </tbody>
+      </table>
+
+      <h3 id="map-app">Appendix tables (selected)</h3>
+      <table class="data">
+        <thead><tr><th>App.</th><th>Program(s)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>A2</strong></td><td><code>sumstats_b</code>; <code>summary_stats_la</code></td></tr>
+          <tr><td><strong>A3</strong></td><td><code>katrina_by_quartiles_va</code>; <code>katrina_iv_gender_ethnicity_noshelter</code></td></tr>
+          <tr><td><strong>A4 &amp; A5</strong> (HOU spec. battery)</td><td><code>katrina_iv_c</code>, <code>…_va_fe</code>, <code>…_va_class</code>, <code>…_va_outlier</code>, <code>…_va_intpanel</code>, <code>katrina_by_quartiles_0405inst</code>, <code>…_va_scale</code>, <code>…_attrition</code>, <code>…_va_grade_altstd</code>, <code>…_va_campusyear</code>, <code>…_va_campusgrade</code>, <code>…_va_totenroll</code>, <code>…_va_newentrant</code>, <code>…_va_nozero</code></td></tr>
+          <tr><td><strong>A6</strong></td><td><code>katrina_by_quartiles_va_quintiles</code></td></tr>
+          <tr><td><strong>A7 / A8 / A42</strong></td><td><code>katrina_by_quartiles_avgweeklyenroll_b</code>; <code>katrina_by_quartiles_halfyear_enroll</code></td></tr>
+          <tr><td><strong>A9 &amp; A10</strong></td><td><code>katrina_by_quartiles_lim_test_fullint_math</code>; <code>…_read</code> (+ <code>_nolag</code>/<code>_nolagint</code>)</td></tr>
+          <tr><td><strong>A11</strong></td><td><code>katrina_by_quartiles_testtaking</code>; <code>check_non_test_takers2</code></td></tr>
+          <tr><td><strong>A14</strong></td><td><code>epple_romano_f_ela_grade_fullintb</code>; <code>epple_romano_f_math_grade_fullintb</code></td></tr>
+          <tr><td><strong>A15–A19, A21–A22, A27–A28, A30, A32–A37, A39, A43</strong></td><td><code>quartile_analysis_revision_d</code></td></tr>
+          <tr><td><strong>A20</strong></td><td><code>quartile_analysis_revision_full_b_tests_nobon</code></td></tr>
+          <tr><td><strong>A23 &amp; A24</strong></td><td><code>quartile_analysis_revision_full_trends_b</code></td></tr>
+          <tr><td><strong>A25 &amp; A26</strong></td><td><code>school_level_placebo_b</code>; <code>school-trend</code></td></tr>
+          <tr><td><strong>A29</strong></td><td><code>quartile_analysis_revision_full_scale</code></td></tr>
+          <tr><td><strong>A31</strong></td><td><code>quartile_analysis_revision_full_FE_b</code></td></tr>
+          <tr><td><strong>A38</strong></td><td><code>quartile_analysis_revision_alt_standard2</code></td></tr>
+          <tr><td><strong>A44 / A45 / A46</strong></td><td><code>analyze_school_level2_quartiles_b</code>; <code>katrina_resources</code>; <code>katrina_by_quartiles_leave</code></td></tr>
+        </tbody>
+      </table>
+      <p>The complete map (every appendix table) is in <a href="../README.md">README.md §8</a>.</p>
+    </section>
+
+    <section id="newyears">
+      <h2>Re-running with new years</h2>
+      <p>The chief obstacle to extending the code is that <strong>years are hardcoded throughout</strong> — in loops, sample filters, the standardization constants, the instrument, and the "carry 2005 forward to 2006" rules. Each annotated <code>.do</code> file flags its own with a <code>// YEAR HARDCODE</code> comment. The checklist:</p>
+      <ol>
+        <li><strong>Stage new raw data in the same shape</strong> — match variable names and the per-year file naming the loaders expect (<code>ada-2007-08</code>, <code>demog_2007</code>, <code>taks_2007_eng_a</code>, …).</li>
+        <li><strong>Repoint hardcoded paths</strong> — find/replace each absolute root (<code>/work/i/imberman/imberman/…</code>, <code>/home/s/simberman/…</code>, <code>C:\D\Research\…</code>) with your global.</li>
+        <li><strong>Widen every year range</strong> — <code>forvalues year=1997/2006</code>, <code>keep if year&gt;=2002</code>, etc. Keep <code>2005</code> as the treatment onset (share = 0 before it) unless re-anchoring the design.</li>
+        <li><strong>Rebuild standardization</strong> — extend the within-grade×year <code>summarize</code> loops; for Houston's <em>hardcoded statewide</em> TAKS mean/SD constants you must supply each new year's official figures or switch to the data-driven loop.</li>
+        <li><strong>Extend baseline quartiles</strong> — revisit the "blank thin grade/year cells" rules so new tested grades are handled correctly.</li>
+        <li><strong>Extend grade×year fixed effects</strong> — these expand automatically, but check any hand-named/omitted base-category dummy.</li>
+        <li><strong>Re-run &amp; reconcile</strong> — reproduce the <em>original</em> years first (diff against the published tables), then add new years so divergences are attributable to the new data, and re-check the placebo / pre-trend files.</li>
+      </ol>
+      <div class="callout warn"><span class="h">Conceptual caveat</span>The design is anchored to a one-time 2005-06 shock. Adding <em>later</em> years extends the post-period (persistence, dynamics); it does not create new treatment. To study a different shock, treat the year the new transfers arrive as the new "2005-06" and shift every year reference accordingly.</div>
+    </section>
+
+    <section id="downloads">
+      <h2>Files &amp; documents</h2>
+      <div class="downloads">
+        <a class="dl" href="files.html"><div class="n">📂 Browse all files →</div><div class="d">Read every .do file &amp; doc in-page, with highlighting</div></a>
+        <a class="dl" href="files.html#README.md"><div class="n">README.md</div><div class="d">Detailed replication guide + new-years walkthrough</div></a>
+        <a class="dl" href="files.html#master.do"><div class="n">master.do</div><div class="d">Single entry point &amp; canonical run order</div></a>
+        <a class="dl" href="files.html#docs/CLEANING_AND_DECISIONS.md"><div class="n">CLEANING_AND_DECISIONS.md</div><div class="d">Cleaning pipeline &amp; key judgment calls</div></a>
+        <a class="dl" href="files.html#docs/PROGRAMS_AND_COMMANDS.md"><div class="n">PROGRAMS_AND_COMMANDS.md</div><div class="d">Reusable code idioms &amp; SSC commands</div></a>
+        <a class="dl" href="files.html"><div class="n">programs/</div><div class="d">79 commented Stata .do files — browse &amp; read</div></a>
+        <a class="dl" href="files.html#w15291.pdf"><div class="n">w15291.pdf</div><div class="d">NBER working paper — embedded viewer</div></a>
+        <a class="dl" href="files.html#20091305_app.pdf"><div class="n">20091305_app.pdf</div><div class="d">Online appendix (Tables 1–46) — embedded viewer</div></a>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer class="site">
+  <div class="inner">
+    Replication documentation for <em>Katrina's Children: Evidence on the Structure of Peer Effects from Hurricane Evacuees</em> (Imberman, Kugler &amp; Sacerdote, <em>American Economic Review</em>; NBER WP 15291).
+    Page layout modeled on the “Find Economic Articles with Data” replication database. Documentation comments only — no executable code was altered.
+  </div>
+</footer>
+
+<script>
+/* Auto-link every program / file reference in the overview to the file browser. */
+(function(){
+  var NAMES=["attendence","demographics_clean","taks_append","discipline","merge_c",
+   "alt_scale","alt_standardize","alt_standardize_2","school_level_means",
+   "quartile_data","quintile_data","placebo_quartile_data",
+   "summary_stats_la","sumstats_houston","sumstats_b",
+   "analysis_revision_linear","katrina_nonkatrina","katrina_by_quartiles_va_grade_statestd",
+   "katrina_iv_gender_ethnicity_noshelter_grade","katrina_placebotest_grade",
+   "katrina_by_quartiles_lim_test_fullint_math","katrina_by_quartiles_lim_test_fullint_read",
+   "katrina_by_quartiles_pre_katrina_ols","quartile_analysis_revision_d",
+   "epple_romano_f_math_grade_fullintb","epple_romano_f_ela_grade_fullintb",
+   "quartile_analysis_revision_full_b_tests_nobon","school_level_placebo_b","school-trend",
+   "katrina_by_quartiles_va","katrina_by_quartiles_va_grade","katrina_iv_gender_ethnicity_noshelter",
+   "katrina_iv_c","katrina_iv_c_grade","katrina_by_quartiles_va_fe","katrina_by_quartiles_va_class",
+   "katrina_by_quartiles_va_campusgrade","katrina_by_quartiles_va_campusyear","katrina_by_quartiles_va_grade_altstd",
+   "katrina_by_quartiles_va_outlier","katrina_by_quartiles_va_outlier_8","katrina_by_quartiles_va_intpanel",
+   "katrina_by_quartiles_va_scale","katrina_by_quartiles_va_totenroll","katrina_by_quartiles_va_newentrant",
+   "katrina_by_quartiles_va_nozero","katrina_by_quartiles_0405inst","katrina_placebotest_c","katrina_by_quartiles_va_quintiles",
+   "katrina_by_quartiles_attrition","katrina_by_quartiles_avgweeklyenroll_b","katrina_by_quartiles_halfyear_enroll",
+   "katrina_by_quartiles_testtaking","check_non_test_takers2","katrina_by_quartiles_leave","katrina_resources",
+   "analyze_school_level2_quartiles_b","quartile_analysis_revision_full_trends_b","quartile_analysis_revision_full_scale",
+   "quartile_analysis_revision_full_FE_b","quartile_analysis_revision_alt_standard2","quartile_analysis_revision_quintiles",
+   "quartile_analysis_revision_full_b_tests","quartile_analysis_revision_trends","quartile_analysis_revision_0405inst",
+   "epple_romano_f_math_grade_fullintb_nolag","epple_romano_f_ela_grade_fullintb_nolag",
+   "epple_romano_f_math_grade_fullint_nolagint","epple_romano_f_ela_grade_fullint_nolagint",
+   "katrina_by_quartiles_lim_test_fullint","katrina_by_quartiles_lim_test_fullint_nolag","katrina_by_quartiles_lim_test_nolag",
+   "katrina_by_quartiles_lim_test_fullint_math_nolag","katrina_by_quartiles_lim_test_fullint_math_nolagint",
+   "katrina_by_quartiles_lim_test_fullint_read_nolag","katrina_by_quartiles_lim_test_fullint_read_nolagint",
+   "katrina_by_quartiles_lim_test_fullint_math_temp","extra_stuff","extra_stuff_houston"];
+  var DO={};
+  NAMES.forEach(function(n){DO[n]=n+".do"});
+  DO["README"]="README.md"; DO["master"]="master.do";
+  DO["CLEANING_AND_DECISIONS"]="docs/CLEANING_AND_DECISIONS.md";
+  DO["PROGRAMS_AND_COMMANDS"]="docs/PROGRAMS_AND_COMMANDS.md";
+  DO["w15291"]="w15291.pdf"; DO["20091305_app"]="20091305_app.pdf";
+  /* abbreviated forms used in the dense appendix rows */
+  var ABBR={"…_va_fe":"katrina_by_quartiles_va_fe","…_va_class":"katrina_by_quartiles_va_class",
+   "…_va_outlier":"katrina_by_quartiles_va_outlier","…_va_intpanel":"katrina_by_quartiles_va_intpanel",
+   "…_va_scale":"katrina_by_quartiles_va_scale","…_attrition":"katrina_by_quartiles_attrition",
+   "…_va_grade_altstd":"katrina_by_quartiles_va_grade_altstd","…_va_campusyear":"katrina_by_quartiles_va_campusyear",
+   "…_va_campusgrade":"katrina_by_quartiles_va_campusgrade","…_va_totenroll":"katrina_by_quartiles_va_totenroll",
+   "…_va_newentrant":"katrina_by_quartiles_va_newentrant","…_va_nozero":"katrina_by_quartiles_va_nozero",
+   "…_read":"katrina_by_quartiles_lim_test_fullint_read"};
+  Object.keys(ABBR).forEach(function(k){DO[k]=ABBR[k]+".do"});
+  function strip(s){return s.replace(/\.(do|md|pdf)$/,'')}
+  /* 1) inline <code> references */
+  Array.prototype.forEach.call(document.querySelectorAll('main code'),function(c){
+    if(c.closest('a'))return;
+    var base=strip(c.textContent.trim());
+    if(!DO[base])return;
+    var a=document.createElement('a');a.href='files.html#'+DO[base];a.title='Open '+DO[base]+' in the file browser';
+    c.parentNode.insertBefore(a,c);a.appendChild(c);
+  });
+  /* 2) file names inside the ASCII pipeline / tree blocks */
+  Array.prototype.forEach.call(document.querySelectorAll('.pipe'),function(p){
+    var w=document.createTreeWalker(p,NodeFilter.SHOW_TEXT,null),nodes=[],t;
+    while(t=w.nextNode())nodes.push(t);
+    nodes.forEach(function(tn){
+      var s=tn.nodeValue,re=/[A-Za-z0-9_\-]+\.(do|md|pdf)/g;
+      if(!re.test(s))return; re.lastIndex=0;
+      var frag=document.createDocumentFragment(),last=0,m;
+      while(m=re.exec(s)){
+        var base=strip(m[0]);
+        if(last<m.index)frag.appendChild(document.createTextNode(s.slice(last,m.index)));
+        if(DO[base]){var a=document.createElement('a');a.href='files.html#'+DO[base];a.textContent=m[0];frag.appendChild(a);}
+        else frag.appendChild(document.createTextNode(m[0]));
+        last=m.index+m[0].length;
+      }
+      if(last<s.length)frag.appendChild(document.createTextNode(s.slice(last)));
+      tn.parentNode.replaceChild(frag,tn);
+    });
+  });
+})();
+</script>
+</body>
+</html>

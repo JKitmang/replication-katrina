@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exhibits · Katrina's Children — Imberman, Kugler &amp; Sacerdote</title>
+<style>
+  :root{
+    --ink:#1a1a1a; --muted:#5b6470; --line:#e2e5ea; --bg:#ffffff;
+    --panel:#f6f7f9; --accent:#7a1f2b; --accent2:#0b4f6c; --code:#f0f2f4;
+    --ok:#1e6b3a; --okbg:#e7f3ec; --warn:#8a5400; --warnbg:#fbf1df;
+    --maxw:1240px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.55;font-size:15px}
+  a{color:var(--accent2);text-decoration:none} a:hover{text-decoration:underline}
+  code{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:.86em}
+  header.top{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--line);
+       display:flex;align-items:center;gap:14px;padding:12px 22px}
+  header.top .brand{font-weight:700;letter-spacing:-.01em}
+  header.top .brand span{color:var(--accent)}
+  header.top nav{margin-left:auto;display:flex;gap:18px;font-size:14px}
+  header.top nav a{color:var(--muted)} header.top nav a.active{color:var(--ink);font-weight:600}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:22px}
+  h1{font-size:24px;margin:6px 0 4px;letter-spacing:-.02em}
+  .cite{color:var(--muted);font-size:13.5px;margin:0 0 4px}
+  .disclaimer{background:var(--warnbg);border:1px solid #f0e0c0;color:#6b4e1f;font-size:12.5px;
+       padding:9px 13px;border-radius:8px;margin:12px 0 18px}
+  /* filter bar */
+  .filters{position:sticky;top:53px;z-index:10;background:#fff;border:1px solid var(--line);border-radius:12px;
+       padding:14px 16px;margin-bottom:18px;display:grid;gap:10px}
+  .frow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .frow .lbl{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);min-width:96px}
+  .chip{border:1px solid var(--line);background:#fff;border-radius:20px;padding:5px 12px;font-size:13px;
+       cursor:pointer;color:var(--muted)}
+  .chip:hover{border-color:var(--accent2)}
+  .chip.on{background:var(--accent2);border-color:var(--accent2);color:#fff}
+  .chip.on.main{background:var(--accent);border-color:var(--accent)}
+  #search{flex:1;min-width:180px;padding:7px 11px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:14px}
+  .count{font-size:13px;color:var(--muted);margin:0 0 12px}
+  /* grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:18px}
+  .card{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+  .thumb{background:var(--panel);border-bottom:1px solid var(--line);text-align:center;position:relative;max-height:340px;overflow:hidden}
+  .thumb img{width:100%;display:block}
+  .thumb .open{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.92);border:1px solid var(--line);
+       border-radius:6px;padding:3px 9px;font-size:12px}
+  .cbody{padding:13px 15px;display:flex;flex-direction:column;gap:9px}
+  .chead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .num{font-size:11px;font-weight:700;color:#fff;background:var(--accent);padding:2px 8px;border-radius:20px}
+  .num.app{background:var(--accent2)}
+  .kind{font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border:1px solid var(--line);padding:1px 6px;border-radius:4px}
+  .ctitle{font-size:14.5px;font-weight:600;margin:0;line-height:1.35}
+  .tagrow{display:flex;flex-wrap:wrap;gap:5px}
+  .tag{font-size:11px;background:#eef1f4;color:#41506a;padding:2px 8px;border-radius:20px}
+  .badge{font-size:11px;padding:2px 8px;border-radius:20px}
+  .badge.exp{background:var(--okbg);color:var(--ok)} .badge.log{background:var(--panel);color:var(--muted)}
+  .evalh{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:2px 0 0}
+  ul.eval{margin:0;padding-left:17px;font-size:13px;color:#36404e} ul.eval li{margin:3px 0}
+  .progs{font-size:12.5px;color:var(--muted)} .progs a{font-family:"SF Mono",monospace;font-size:12px}
+  details.code{border-top:1px dashed var(--line);padding-top:7px}
+  details.code summary{font-size:12.5px;color:var(--accent2);cursor:pointer}
+  details.code pre{background:#1e1e1e;color:#e8e8e8;padding:10px 12px;border-radius:7px;overflow-x:auto;
+       font-family:"SF Mono",monospace;font-size:11px;margin:7px 0 0;white-space:pre}
+  .notemap{font-size:11.5px;color:var(--warn);background:var(--warnbg);padding:5px 9px;border-radius:6px}
+  footer{color:var(--muted);font-size:12.5px;text-align:center;padding:30px 0}
+  @media(max-width:560px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">Katrina's <span>Children</span></div>
+  <nav>
+    <a href="index.html">Overview</a>
+    <a href="files.html">Browse files</a>
+    <a href="search.html">Search code</a>
+    <a href="exhibits.html" class="active">Exhibits</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <h1>Exhibit catalog — tables &amp; figures</h1>
+  <p class="cite" id="cite"></p>
+  <div class="disclaimer" id="disclaimer"></div>
+
+  <div class="filters">
+    <div class="frow"><span class="lbl">Section</span><span id="fSection"></span></div>
+    <div class="frow"><span class="lbl">Type</span><span id="fKind"></span>
+      <span class="lbl" style="min-width:60px">Code</span><span id="fExports"></span></div>
+    <div class="frow"><span class="lbl">Analysis type</span><span id="fTags"></span></div>
+    <div class="frow"><span class="lbl">Search</span><input id="search" placeholder="title, method, program…"></div>
+  </div>
+
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+</div>
+
+<footer>
+  Built from the replication package. Exhibits © the authors / American Economic Association — shown here for replication and methodological commentary.
+</footer>
+
+<script>
+const BASE = "../"; // catalog paths are repo-root-relative; this page lives in website/
+const state = { section:"all", kind:"all", exports:"all", tags:new Set(), q:"" };
+let CAT = null;
+
+fetch(BASE + "exhibits/catalog.json").then(r=>r.json()).then(d=>{ CAT=d; init(); })
+  .catch(e=>{ document.getElementById("grid").innerHTML="<p>Could not load catalog.json ("+e+").</p>"; });
+
+function init(){
+  document.getElementById("cite").innerHTML =
+    CAT.paper.replace(/"/g,"") + ' &nbsp;·&nbsp; <a href="https://doi.org/'+CAT.doi+'" target="_blank">doi:'+CAT.doi+'</a>';
+  document.getElementById("disclaimer").textContent = CAT.note;
+  // section chips
+  chips("fSection", [["all","All"],["main","Main body"],["appendix","Appendix"]],
+        v=>{state.section=v;render();}, ()=>state.section, true);
+  chips("fKind", [["all","All"],["table","Tables"],["figure","Figures"]],
+        v=>{state.kind=v;render();}, ()=>state.kind);
+  chips("fExports", [["all","All"],["yes","Exports to file"],["no","Log only"]],
+        v=>{state.exports=v;render();}, ()=>state.exports);
+  // tag chips
+  const tagBox=document.getElementById("fTags");
+  Object.entries(CAT.tagLabels).forEach(([k,label])=>{
+    const c=document.createElement("span"); c.className="chip"; c.textContent=label;
+    c.onclick=()=>{ state.tags.has(k)?state.tags.delete(k):state.tags.add(k); c.classList.toggle("on"); render(); };
+    tagBox.appendChild(c);
+  });
+  document.getElementById("search").addEventListener("input",e=>{state.q=e.target.value.toLowerCase();render();});
+  render();
+}
+
+function chips(id, opts, set, get, isSection){
+  const box=document.getElementById(id);
+  opts.forEach(([v,label])=>{
+    const c=document.createElement("span"); c.className="chip"+(get()===v?" on":"")+(isSection?" main":"");
+    c.textContent=label;
+    c.onclick=()=>{ set(v); [...box.children].forEach(x=>x.classList.remove("on")); c.classList.add("on"); };
+    box.appendChild(c);
+  });
+}
+
+function match(e){
+  if(state.section!=="all" && e.section!==state.section) return false;
+  if(state.kind!=="all" && e.kind!==state.kind) return false;
+  if(state.exports==="yes" && !e.exports) return false;
+  if(state.exports==="no" && e.exports) return false;
+  if(state.tags.size && !e.tags.some(t=>state.tags.has(t))) return false;
+  if(state.q){
+    const hay=(e.num+" "+e.title+" "+e.tags.map(t=>CAT.tagLabels[t]).join(" ")+" "+e.programs.join(" ")).toLowerCase();
+    if(!hay.includes(state.q)) return false;
+  }
+  return true;
+}
+
+function render(){
+  const items=CAT.exhibits.filter(match);
+  document.getElementById("count").textContent =
+    items.length+" exhibit"+(items.length!==1?"s":"")+" shown · "+
+    CAT.exhibits.filter(e=>e.section==="main").length+" main, "+
+    CAT.exhibits.filter(e=>e.section==="appendix").length+" appendix in total";
+  const grid=document.getElementById("grid");
+  grid.innerHTML = items.map(card).join("") || "<p>No exhibits match these filters.</p>";
+}
+
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+function card(e){
+  const tags=e.tags.map(t=>`<span class="tag">${esc(CAT.tagLabels[t]||t)}</span>`).join("");
+  const badge=e.exports?'<span class="badge exp">Exports to file</span>':'<span class="badge log">Log only</span>';
+  const progs=e.programs.length
+     ? `<div class="progs">Code: ${e.programs.map(p=>`<a href="${BASE}programs/${p}" target="_blank">${esc(p)}</a>`).join(", ")}</div>`
+     : `<div class="progs">Figure produced outside Stata (map).</div>`;
+  const evalHtml=`<p class="evalh">Good-practice evaluation</p><ul class="eval">${e.evaluation.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`;
+  const code=e.snippet?`<details class="code"><summary>Originating Stata code</summary><pre>${esc(e.snippet)}</pre></details>`:"";
+  const noteMap=e.noteMap?`<div class="notemap">${esc(e.noteMap)}</div>`:"";
+  return `<article class="card">
+    <div class="thumb">
+      <a href="${BASE}${e.pdf}" target="_blank"><img loading="lazy" src="${BASE}${e.png}" alt="${esc(e.num)}"></a>
+      <a class="open" href="${BASE}${e.pdf}" target="_blank">PDF ↗</a>
+    </div>
+    <div class="cbody">
+      <div class="chead"><span class="num ${e.section==='appendix'?'app':''}">${esc(e.num)}</span>
+        <span class="kind">${esc(e.kind)}</span>${badge}</div>
+      <p class="ctitle">${esc(e.title)}</p>
+      <div class="tagrow">${tags}</div>
+      ${noteMap}
+      ${progs}
+      ${evalHtml}
+      ${code}
+    </div>
+  </article>`;
+}
+</script>
+</body>
+</html>
